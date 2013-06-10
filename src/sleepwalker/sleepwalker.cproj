@@ -102,6 +102,9 @@
     <Compile Include="sleepwalker.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="sleepwalker.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="tsl230.c">
       <SubType>compile</SubType>
     </Compile>
