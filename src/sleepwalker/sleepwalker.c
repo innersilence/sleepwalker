@@ -7,10 +7,6 @@
 #include "pin.h"
 #include "tsl230.h"
 
-#define LED_RED_PIN  5
-#define LED_IR_PIN   8
-#define POLL_FREQ_HZ 50
-
 
 void init_platform() {
 	pin_output(TSL_S0);
