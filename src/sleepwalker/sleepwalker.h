@@ -1,4 +1,3 @@
-
 #ifndef SLEEPWALKER_H_
 #define SLEEPWALKER_H_
 
@@ -19,3 +18,4 @@
 #define POLL_FREQ_HZ 50
 
 #endif /* SLEEPWALKER_H_ */
+
