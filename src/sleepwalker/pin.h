@@ -11,9 +11,10 @@ void pin_output(uint8_t pin); // Set pin as OUT.
 void pin_input(uint8_t pin); // Set pin as INPUT.
 
 typedef enum {
-	EDGE_RISING,
+	EDGE_LOW = 0,
+	EDGE_BOTH,
 	EDGE_FALLING,
-	EDGE_BOTH
+	EDGE_RISING
 } pin_interrupt_edge_e;
 
 void pin_interrupt_int0(uint8_t pin, pin_interrupt_edge_e type);

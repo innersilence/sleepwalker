@@ -1,30 +1,47 @@
-#include "tsl230.h"
+#include "sleepwalker.h"
+
+#include <avr/interrupt.h>
+#include <util/delay.h>
+
 #include "pin.h"
+#include "timer.h"
+#include "tsl230.h"
 
 
 
-uint16_t tsl230_read(void) {
-	return 58;
+extern volatile uint16_t timer1_overflow_counter;
+
+volatile uint16_t timer1_rising_capture;
+volatile uint16_t timer1_falling_capture;
+uint8_t tsl230_ready_to_read;
+
+
+uint16_t tsl230_get(uint16_t wait_poll_interval_millisec) {
+   while (!tsl230_ready_to_read) {
+       _delay_ms(50);
+   }
+
+	return timer1_get();
 }
 
 
-void tsl230_sensitivity(tsl230_sensitivity_e sensitivity) {
+void tsl230_sensitivity(uint8_t s0_pin, uint8_t s1_pin, tsl230_sensitivity_e sensitivity) {
 	switch (sensitivity) {
 		case POWER_DOWN:
-			pin_low(TSL_S0);
-			pin_low(TSL_S1);
+			pin_low(s0_pin);
+			pin_low(s1_pin);
 			return;
 		case X1:
-			pin_high(TSL_S0);
-			pin_low(TSL_S1);
+			pin_high(s0_pin);
+			pin_low(s1_pin);
 			return;
 		case X10:
-			pin_low(TSL_S0);
-			pin_high(TSL_S1);
+			pin_low(s0_pin);
+			pin_high(s1_pin);
 			return;
 		case X100:
-			pin_high(TSL_S0);
-			pin_high(TSL_S1);
+			pin_high(s0_pin);
+			pin_high(s1_pin);
 			return;
 		//default:
 			//printf("TLS230: incorrect sensitivity value: %d\n", sensitivity);
@@ -32,23 +49,23 @@ void tsl230_sensitivity(tsl230_sensitivity_e sensitivity) {
 }
 	
 
-void tsl230_scaling(tsl230_scaling_e scaling) {
+void tsl230_scaling(uint8_t s2_pin, uint8_t s3_pin, tsl230_scaling_e scaling) {
 	switch (scaling) {
 		case DIV_BY_1:
-			pin_low(TSL_S2);
-			pin_low(TSL_S3);
+			pin_low(s2_pin);
+			pin_low(s3_pin);
 			return;
 		case DIV_BY_2:
-			pin_high(TSL_S2);
-			pin_low(TSL_S3);
+			pin_high(s2_pin);
+			pin_low(s3_pin);
 			return;
 		case DIV_BY_10:
-			pin_low(TSL_S2);
-			pin_high(TSL_S3);
+			pin_low(s2_pin);
+			pin_high(s3_pin);
 			return;		
 		case DIV_BY_100:
-			pin_high(TSL_S2);
-			pin_high(TSL_S3);
+			pin_high(s2_pin);
+			pin_high(s3_pin);
 			return;		
 		//default:
 		//	printf("TLS230: incorrect scaling value: %d\n", scaling);
@@ -56,7 +73,30 @@ void tsl230_scaling(tsl230_scaling_e scaling) {
 }
 
 
-void tsl230_init(tsl230_sensitivity_e sensitivity, tsl230_scaling_e scaling) {
-	tsl230_sensitivity(sensitivity);
-	tsl230_scaling(scaling);
+void tsl230_init(uint8_t s0_pin, uint8_t s1_pin, uint8_t s2_pin, uint8_t s3_pin, uint8_t freq_pin, uint8_t oe_pin, tsl230_sensitivity_e sensitivity, tsl230_scaling_e scaling) {
+	pin_output(s0_pin);
+	pin_output(s1_pin);
+	pin_output(s2_pin);
+	pin_output(s3_pin);
+	pin_input(freq_pin);
+			
+	tsl230_sensitivity(s0_pin, s1_pin, sensitivity);
+	tsl230_scaling(s2_pin, s3_pin, scaling);
+	
+	//pin_interrupt_int0(freq_pin, EDGE_BOTH);
 }
+
+
+ISR(TIMER1_CAPT_vect)
+{
+   // Timer set up to interrupt on rising edge first.
+   timer1_rising_capture = ICR1;
+}
+
+
+ISR(TIMER1_OVF_vect)
+{
+   timer1_overflow_counter ++;
+}
+
+

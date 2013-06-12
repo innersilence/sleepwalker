@@ -99,10 +99,22 @@
     <Compile Include="pin.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="port.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="port.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="sleepwalker.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="sleepwalker.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="timer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="timer.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="tsl230.c">
