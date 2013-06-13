@@ -1,6 +1,7 @@
 red led (660nm):	($0.50) http://canada.newark.com/dialight/597-3111-407f/led-red-1-5mm-x-2mm-17mcd-660nm/dp/30K4900
 ir led (940nm):		($0.96) http://canada.newark.com/osa-opto-light/ois-150-it940-t/led-ir-1206-940nm/dp/86W0554
 light sensor: 		($4.85) http://www.digikey.ca/product-search/en/sensors-transducers/ambient-light-sensors/1966828?k=TSL230R
-current regulator:
-ATTiny328P:		($3.16) http://canada.newark.com/atmel/atmega328p-pu/ic-8bit-mcu-avr-mega-20mhz-28/dp/68T2944
-Bluetooth module: 	($6.60)https://dx.com/p/wireless-bluetooth-rs232-ttl-transceiver-module-80711
+current regulator:($0.79) http://www.digikey.ca/product-detail/en/LP2980IM5-ADJ%2FNOPB/LP2980IM5-ADJ%2FNOPBCT-ND/483134
+ATTiny328P:		    ($3.16) http://canada.newark.com/atmel/atmega328p-pu/ic-8bit-mcu-avr-mega-20mhz-28/dp/68T2944
+Bluetooth module: ($6.60)https://dx.com/p/wireless-bluetooth-rs232-ttl-transceiver-module-80711
+Voltage regulator:() 
