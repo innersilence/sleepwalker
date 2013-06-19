@@ -1,9 +1,22 @@
-red led (660nm):   ($0.50) http://canada.newark.com/dialight/597-3111-407f/led-red-1-5mm-x-2mm-17mcd-660nm/dp/30K4900
-ir led (940nm):    ($0.96) http://canada.newark.com/osa-opto-light/ois-150-it940-t/led-ir-1206-940nm/dp/86W0554
-                   ($0.35) http://www.digikey.ca/product-detail/en/APT2012F3C/754-1435-1-ND/2163793
+Red           (2.1V 20mA) http://canada.newark.com/kingbright/ka-3528srct-j4/led-plcc-2-x-red-230mcd-640nm/dp/88W4934
+current reg   (2.5V 20mA) http://www.digikey.ca/product-detail/en/LT3008ETS8-2.5%23TRMPBF/LT3008ETS8-2.5%23TRMPBFCT-ND/2074462
+IR            (1.28V 20mA) http://canada.newark.com/optek-technology/op180/ir-emitter-940nm-2-4mm-lcc-2-smd/dp/99M0675
+current reg   (1.5V 20mA) http://www.digikey.ca/product-detail/en/LT3009ESC8-1.5%23TRMPBF/LT3009ESC8-1.5%23TRMPBFCT-ND/2118229
+                   
 light sensor:      ($4.85) http://www.digikey.ca/product-search/en/sensors-transducers/ambient-light-sensors/1966828?k=TSL230R
-current regulator: ($0.79) http://www.digikey.ca/product-detail/en/LP2980IM5-ADJ%2FNOPB/LP2980IM5-ADJ%2FNOPBCT-ND/483134
 ATTiny328P:        ($3.22) DIP http://www.digikey.ca/product-detail/en/ATMEGA328-PU/ATMEGA328-PU-ND/2271026
                    ($3.42) TQFP http://www.digikey.ca/product-detail/en/ATMEGA328P-AU/ATMEGA328P-AU-ND/1832260
 Bluetooth module:  ($6.60) https://dx.com/p/wireless-bluetooth-rs232-ttl-transceiver-module-80711
-Voltage regulator: () 
+
+
+
+///////
+
+red led (660nm):   ($0.50) http://canada.newark.com/dialight/597-3111-407f/led-red-1-5mm-x-2mm-17mcd-660nm/dp/30K4900
+                   ($0.96) http://canada.newark.com/kingbright/kp-3216src-j4/led-1206-x-br-red-200mcd-640nm/dp/88W4940
+ir led (940nm):    ($0.96) http://canada.newark.com/osa-opto-light/ois-150-it940-t/led-ir-1206-940nm/dp/86W0554
+                   ($0.35) http://www.digikey.ca/product-detail/en/APT2012F3C/754-1435-1-ND/2163793
+                   
+                   ir &red (20mA, 1,3/2.1V)
+                   http://canada.newark.com/kingbright/ka-3528srct-j4/led-plcc-2-x-red-230mcd-640nm/dp/88W4934
+                   http://canada.newark.com/optek-technology/op180/ir-emitter-940nm-2-4mm-lcc-2-smd/dp/99M0675
