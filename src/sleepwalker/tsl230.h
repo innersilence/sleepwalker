@@ -41,10 +41,17 @@ typedef enum {
 	DIV_BY_100
 } tsl230_scaling_e;
 
-void tsl230_init(void);  
+typedef enum {
+   EDGE_RISING,
+   EDGE_FALLING,
+   EDGE_DONE
+} lsl230_interrupt_edge_e;
+
+void tsl230_init(void); 
 void tsl230_sensitivity(tsl230_sensitivity_e sensitivity);
 void tsl230_scaling(tsl230_scaling_e scaling);
 void tsl230_start(void);
+short tsl230_ready(void);
 uint32_t tsl230_read(void);
 
 #endif /* TSL230_H_ */

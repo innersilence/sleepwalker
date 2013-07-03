@@ -27,13 +27,14 @@ THE SOFTWARE.
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-//#include "pin.h"
-//#include "timer.h"
 #include "tsl230.h"
 
-volatile uint16_t timer1_overflow_counter;
-//volatile uint16_t timer1_rising_capture;
-//volatile uint16_t timer1_falling_capture;
+volatile uint16_t timer1_rising_overflow_counter = 0;
+volatile uint16_t timer1_falling_overflow_counter = 0;
+volatile uint16_t timer1_rising_capture = 0;
+volatile uint16_t timer1_falling_capture = 0;
+volatile uint16_t timer1_done_capture = 0;
+volatile lsl230_interrupt_edge_e timer1_edge = 0;
 
 //uint8_t tsl230_ready_to_read;
 
@@ -97,17 +98,28 @@ void tsl230_oe_high() {
    PORTB |= _BV(PORTB7);
 }
 
+// TCCR1A, TCCR1B, ICRH1H, ICR1L
+// http://www.embedds.com/programming-16-bit-timer-on-atmega328/
+void tls230_timer1_init(void) {  
+   TCNT1 = 0; // Initial value. 
+   TCCR1B |= _BV(ICES1); // First capture on rising edge.
+   TCCR1B |= _BV(CS10); // Start timer without prescaler.
+}
 
-void tls230_timer1_init() {
-   //TCCR1A= ;
-   //TCCR1B = ;
-   //ICRH1H = ;
-   //ICR1L = ;
-   
+void tls230_timer1_enable(void) {
    TIMSK1 |= _BV(ICIE1); // Enable Input Capture Interrupt. (p.139)
    TIMSK1 |= _BV(TOIE1); // Enable overflow (p.139)
+      
+   TIFR1 |= _BV(ICF1); // Event Capture enabled on ICP1 pin. (p.140)
+   TIFR1 |= _BV(TOV1); // ??
+}
+
+void tls230_timer1_disable(void) {
+   TIMSK1 &= ~_BV(ICIE1); // Enable Input Capture Interrupt. (p.139)
+   TIMSK1 &= ~_BV(TOIE1); // Enable overflow (p.139)
    
-   TIFR1 |= ICF1; // Event Capture enabled on ICP1 pin. (p.140)
+   TIFR1 &= ~_BV(ICF1); // Event Capture enabled on ICP1 pin. (p.140)
+   TIFR1 &= ~_BV(TOV1); // ??   
 }
 
 //PB.0 - ICP1 (Input Capture pin 1)
@@ -120,6 +132,7 @@ void tsl230_init(void) {
   tsl230_oe_pin_output();
   
   tls230_timer1_init();
+  tls230_timer1_enable();
 }
 
 void tsl230_sensitivity(tsl230_sensitivity_e sensitivity) {
@@ -165,7 +178,7 @@ void tsl230_scaling(tsl230_scaling_e scaling) {
 }
 
 void tsl230_start(void) {
-   sei();
+   //
 }
 
 // When a capture is triggered, the 16-bit value of the counter (TCNT1) is written to the Input Capture Register (ICR1) (p.120)
@@ -175,13 +188,32 @@ uint32_t tsl230_read(void) {
    return result;
 }
 
+
+short tsl230_ready(void) {
+   return EDGE_DONE - timer1_edge;
+}
+
 // Timer interrupt vector.
 ISR(TIMER1_CAPT_vect) {
-   // Timer set up to interrupt on rising edge first.
-   //timer1_rising_capture = ICR1;
+   if (timer1_edge == EDGE_RISING) {
+      timer1_rising_capture = ICR1;     
+      TCCR1B &= ~_BV(ICES1); // Change capture on falling edge.      
+      timer1_falling_overflow_counter = 0; // Reset overflows.
+   }else if (timer1_edge == EDGE_FALLING) {
+      timer1_falling_capture = ICR1;      
+      TCCR1B |= _BV(ICES1); // Change capture on rising edge.      
+      timer1_rising_overflow_counter = timer1_falling_overflow_counter; // Save first overflow counter.
+   }else if (timer1_edge == EDGE_DONE) {
+      timer1_done_capture = ICR1;
+      tls230_timer1_disable();
+      //stop input capture and overflow interrupts
+      //TIMSK1&=~((1<<ICIE1)|(1<<TOIE1));
+   }
+
+   timer1_edge ++;
 }
 
 // Timer overflow vector (TIMSK1 |= _BV(TOIE1).
 ISR(TIMER1_OVF_vect) {
-   timer1_overflow_counter ++;
+   timer1_falling_overflow_counter ++;
 }

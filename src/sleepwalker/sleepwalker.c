@@ -25,6 +25,7 @@ THE SOFTWARE.
 #include "sleepwalker.h"
 
 #include <util/delay.h>
+#include <avr/interrupt.h>
 
 #include "led.h"
 #include "tsl230.h"
@@ -33,7 +34,7 @@ THE SOFTWARE.
 #include <avr/io.h>
 
 int main(void) {   
-   //serial_init(9600, PAR_8N1);
+   serial_init(9600, PAR_8N1);
    
    led_ir_pin_output();
    led_red_pin_output();
@@ -49,15 +50,32 @@ int main(void) {
    tsl230_sensitivity(X1);
    tsl230_scaling(DIV_BY_1);
    
+   sei();
    
-   
-   //tsl230_start();
-		
-	/*uint16_t values[2] = {0};
-    while(1) {
-        values[0] = take_measurement(LED_IR_PIN); 
-		values[1] = take_measurement(LED_RED_PIN);
-		send_data((uint8_t*)values, sizeof(values));
-		_delay_ms(1000 / POLL_FREQ_HZ);
-    }*/
+   uint16_t values[2] = {0};
+   while(1) {
+      // Measure IR LED.
+      led_ir_on();
+      tsl230_start();
+      while(1) {
+         if (0 == tsl230_ready()) {
+            values[0] = tsl230_read();
+         }
+      }
+      led_ir_off();
+      
+      // Measure red LED.
+      led_red_on();
+      tsl230_start();
+      while(1) {
+         if (0 == tsl230_ready()) {
+            values[0] = tsl230_read();
+         }
+      }
+      led_red_off();
+      
+      // Send measurements to collector.
+      serial_write((uint8_t*)values, sizeof(values));
+      _delay_ms(1000 / POLL_FREQ_HZ);
+   }      
 }
