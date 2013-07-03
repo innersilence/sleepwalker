@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2013 Dmitry Mukhin <dmukhin.work@gmail.com>
+Copyright (c) 2013 Dmitry Mukhin <zxorro@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,10 +26,6 @@ THE SOFTWARE.
 #define SLEEPWALKER_H_
 
 #define F_CPU 8000000UL // CPU clock 8 MHz
-
-// LED pins.
-#define LED_RED_PIN  10
-#define LED_IR_PIN   11
 
 // TSL230 pins.
 #define TSL_FREQ	2		// Interrupt pin.

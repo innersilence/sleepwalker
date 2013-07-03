@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2013 Dmitry Mukhin <dmukhin.work@gmail.com>>
+Copyright (c) 2013 Dmitry Mukhin <zxorro@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#include <avr/sfr_defs.h>
-#include "port.h"
+#include "serial.h"
 
-void port_bit_set(uint8_t port, uint8_t pin) {
-	port |= _BV(pin);
+void serial_init(uint16_t bauld, uint8_t parity) {
+   
 }
 
-void port_bit_clear(uint8_t port, uint8_t pin) {
-	port &= ~_BV(pin);
+void serial_write(const uint8_t* buffer, int16_t size) {
+   
 }

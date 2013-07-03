@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2013 Dmitry Mukhin <dmukhin.work@gmail.com>
+Copyright (c) 2013 Dmitry Mukhin <zxorro@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,46 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#include "timer.h"
-#include "port.h"
-
-volatile uint16_t timer1_overflow_counter;
+#ifndef LED_H_
+#define LED_H_
 
 
-void timer1_init(uint16_t initial_vaue) {
-
-}
-
-
-void timer1_set_capture_edge(pin_interrupt_edge_e edge) {
-   switch (edge) {
-      case EDGE_BOTH:
-         // Not implemented.
-         break;
-      case EDGE_FALLING:
-         port_bit_clear(TCCR1B, ICES1);
-         break;
-      case EDGE_LOW:
-         // Not implemented.
-         break;
-      case EDGE_RISING:
-         port_bit_set(TCCR1B, ICES1);
-         break;
-   }
-}
+void led_ir_pin_output(void);
+void led_red_pin_output(void);
+void led_ir_on(void);
+void led_ir_off(void);
+void led_red_on(void);
+void led_red_off();
 
 
-void timer1_enable_input_capture() {
-   port_bit_set(TIMSK1, ICIE1);
-}
-
-
-void timer1_enable_overflow_interrupt() {
-   port_bit_set(TIMSK1, TOIE1);
-}
-
-
-uint16_t timer1_get() {
-   return 58;
-}
-
+#endif /* LED_H_ */
