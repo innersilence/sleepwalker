@@ -27,11 +27,11 @@ THE SOFTWARE.
 
 
 void led_ir_pin_output(void);
-void led_red_pin_output(void);
 void led_ir_on(void);
 void led_ir_off(void);
+
+void led_red_pin_output(void);
 void led_red_on(void);
 void led_red_off();
-
 
 #endif /* LED_H_ */

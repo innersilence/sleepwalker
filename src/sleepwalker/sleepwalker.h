@@ -25,17 +25,28 @@ THE SOFTWARE.
 #ifndef SLEEPWALKER_H_
 #define SLEEPWALKER_H_
 
-#define F_CPU 8000000UL // CPU clock 8 MHz
+#define F_CPU 8000000UL // CPU clock 8 MHz.
+#define POLL_FREQ_HZ 20 // 20 times per second.
 
-// TSL230 pins.
-#define TSL_FREQ	2		// Interrupt pin.
-#define TSL_S0		4		// Sensitivity pin 0.
-#define TSL_S1		5		// Sensitivity pin 1.
-#define TSL_S2		6		// Scaling pin 0.
-#define TSL_S3		7		// Scaling pin 1.
-#define TSL_OE		8		// Output Enabled.
+/*
+PB.0 - TSL230 Interrupt Capture pin
+PB.1 - TSL230 OE pin
 
-#define POLL_FREQ_HZ 50
+PB.2 
+PB.3 - AVRISP (mosi/miso)
+
+PB.6
+PB.7 - Taken by external OSC
+
+PD.0 - Bluetooth RX pin
+PD.1 - Bluetooth TX pin
+PD.2 - Red LED pin
+PD.3 - IR LED pin
+PD.4 - TSL230 S0 pin
+PD.5 - TSL230 S1 pin
+PD.6 - TSL230 S2 pin
+PD.7 - TSL230 S3 pin
+*/
 
 #endif /* SLEEPWALKER_H_ */
 

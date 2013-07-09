@@ -26,27 +26,30 @@ THE SOFTWARE.
 
 #include "led.h"
 
+// Pin controls IR LED (PD.3)
 
 void led_ir_pin_output(void) {
-   DDRB |= _BV(PORTB4);
-}
-
-void led_red_pin_output(void) {
-   DDRB |= _BV(PORTB3);
+   DDRD |= _BV(PORTD3);
 }
 
 void led_ir_on(void) {
-   PORTB |= _BV(PORTB4);
+   PORTD |= _BV(PORTD3);
 }
 
 void led_ir_off(void) {
-   PORTB &= ~_BV(PORTB4);
+   PORTD ^= _BV(PORTD3);
+}
+
+// Pin controls Red LED (PD.2)
+
+void led_red_pin_output(void) {
+   DDRD |= _BV(PORTD2);
 }
 
 void led_red_on(void) {
-   PORTB |= _BV(PORTB3);
+   PORTD |= _BV(PORTD2);
 }
 
 void led_red_off() {
-  PORTB &= ~_BV(PORTB3);
+  PORTD ^= _BV(PORTD2);
 }

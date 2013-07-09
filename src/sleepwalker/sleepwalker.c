@@ -33,24 +33,27 @@ THE SOFTWARE.
 
 #include <avr/io.h>
 
-int main(void) {   
+void test_blinky(void ) {
+   DDRB |= _BV(DDB5);   
+   while(1) {
+      PORTB ^= _BV(DDB5);
+      _delay_ms(250);
+   }
+}
+
+int main(void) {  
+   //test_blinky();
+    
    serial_init(9600, PAR_8N1);
    
    led_ir_pin_output();
    led_red_pin_output();
-   
-   /*while(1) {
-      led_ir_on();
-      _delay_ms(1000);
-      led_ir_off();
-      _delay_ms(2000);
-   }*/    
-   
+
    tsl230_init();
    tsl230_sensitivity(X1);
    tsl230_scaling(DIV_BY_1);
    
-   sei();
+   //sei();
    
    uint16_t values[2] = {0};
    while(1) {
