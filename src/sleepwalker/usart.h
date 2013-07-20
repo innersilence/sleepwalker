@@ -22,34 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#include <avr/io.h>
+#ifndef USART_H_
+#define USART_H_
 
-#include "led.h"
+#include <stdint.h>
 
-// Pin controls IR LED (PD.3)
+#define MAX_SBUFFER_SIZE 20
 
-void led_ir_pin_output(void) {
-   DDRD |= _BV(PORTD3);
-}
+typedef struct {
+   uint8_t data[MAX_SBUFFER_SIZE];
+   uint8_t head;
+} cbuffer;
 
-void led_ir_on(void) {
-   PORTD |= _BV(PORTD3);
-}
 
-void led_ir_off(void) {
-   PORTD &= ~_BV(PORTD3);
-}
+void usart0_init(uint16_t baud);
+void usart0_write(const uint8_t* buffer, int16_t size);
+void usart0_read(uint8_t* buffer, int16_t size);
 
-// Pin controls Red LED (PD.2)
 
-void led_red_pin_output(void) {
-   DDRD |= _BV(PORTD2);
-}
-
-void led_red_on(void) {
-   PORTD |= _BV(PORTD2);
-}
-
-void led_red_off() {
-  PORTD &= ~_BV(PORTD2);
-}
+#endif /* USART_H_ */

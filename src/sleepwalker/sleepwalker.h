@@ -46,6 +46,11 @@ PD.4 - TSL230 S0 pin
 PD.5 - TSL230 S1 pin
 PD.6 - TSL230 S2 pin
 PD.7 - TSL230 S3 pin
+
+GND - HC-04 GND (pin 13)
+3V3 - HC-04 +3.3v (pin 12)
+RX1 - HC-04 USART_RX (pin 2)
+TX1 - HC-04 USART_TX (pin 1)
 */
 
 #endif /* SLEEPWALKER_H_ */

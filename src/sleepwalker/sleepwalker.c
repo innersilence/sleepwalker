@@ -29,24 +29,29 @@ THE SOFTWARE.
 
 #include "led.h"
 #include "tsl230.h"
-#include "serial.h"
+#include "usart.h"
+#include "hc04.h"
+#include "error.h"
 
-#include <avr/io.h>
-
-void test_blinky(void ) {
-   DDRB |= _BV(DDB5);   
-   while(1) {
-      PORTB ^= _BV(DDB5);
-      _delay_ms(250);
-   }
-}
 
 int main(void) {  
-   //test_blinky();
-    
-   serial_init(9600, PAR_8N1);
+   error_hc04_command_failed(); // testing blinky.
    
-   led_ir_pin_output();
+   /*usart0_init(38400);
+     
+   if (0 >  hc04_at_command("BAUD", "6")) // Try to set baud rate to 34000
+      usart0_init(9600); // Failed. Use defaults (9600 baud to communicate with BT module)
+    
+   if (0 <  hc04_at_command("BAUD", "6")) // Set baud rate to 38400.
+      usart0_init(38400); // Configure USART to use 38400 too.
+      
+   if (0 > hc04_at_command("NAME", "baboom.me")) { // Test communication with BT module by changing its name.
+      error_hc04_command_failed(); // Never exits, blinks diagnostics.
+   }*/      
+      
+   
+   
+   /*led_ir_pin_output();
    led_red_pin_output();
 
    tsl230_init();
@@ -60,25 +65,19 @@ int main(void) {
       // Measure IR LED.
       led_ir_on();
       tsl230_start();
-      while(1) {
-         if (0 == tsl230_ready()) {
-            values[0] = tsl230_read();
-         }
-      }
+      while(0 != tsl230_ready()) {}
+      values[0] = tsl230_read();
       led_ir_off();
       
       // Measure red LED.
       led_red_on();
       tsl230_start();
-      while(1) {
-         if (0 == tsl230_ready()) {
-            values[0] = tsl230_read();
-         }
-      }
+      while(0 != tsl230_ready()) {}
+      values[1] = tsl230_read();
       led_red_off();
       
       // Send measurements to collector.
-      serial_write((uint8_t*)values, sizeof(values));
+      usart0_write((uint8_t*)values, sizeof(values));
       _delay_ms(1000 / POLL_FREQ_HZ);
-   }      
+   }*/      
 }

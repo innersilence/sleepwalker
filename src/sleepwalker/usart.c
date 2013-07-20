@@ -24,32 +24,26 @@ THE SOFTWARE.
 
 #include <avr/io.h>
 
-#include "led.h"
+#include "sleepwalker.h"
+#include "usart.h"
 
-// Pin controls IR LED (PD.3)
 
-void led_ir_pin_output(void) {
-   DDRD |= _BV(PORTD3);
+void usart0_init(uint16_t baud) {
+   uint16_t baud_value = (F_CPU / (baud * 16UL)) - 1;
+   
+   UBRR0H = (uint8_t)(baud_value >> 8);
+   UBRR0L = (uint8_t)baud_value;
+   
+   UCSR0C |= (1 << UCSZ01) | (1 << UCSZ00); // Set frame format to 8 data bits, no parity, 1 stop bit.   
+   UCSR0B |= (1 << RXEN0) | (1 << RXCIE0); // Enable reception and RC complete interrupt.
 }
 
-void led_ir_on(void) {
-   PORTD |= _BV(PORTD3);
+
+void usart0_write(const uint8_t* buffer, int16_t size) {
+   
 }
 
-void led_ir_off(void) {
-   PORTD &= ~_BV(PORTD3);
-}
 
-// Pin controls Red LED (PD.2)
-
-void led_red_pin_output(void) {
-   DDRD |= _BV(PORTD2);
-}
-
-void led_red_on(void) {
-   PORTD |= _BV(PORTD2);
-}
-
-void led_red_off() {
-  PORTD &= ~_BV(PORTD2);
+void usart0_read(uint8_t* buffer, int16_t size) {
+   
 }

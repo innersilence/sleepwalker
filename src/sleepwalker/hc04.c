@@ -22,15 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#ifndef SERIAL_H_
-#define SERIAL_H_
-
-#include <stdint.h>
-
-#define PAR_8N1 81
-
-void serial_init(uint16_t bauld, uint8_t parity);
-void serial_write(const uint8_t* buffer, int16_t size);
+#include "hc04.h"
+#include "usart.h"
+#include "string.h"
+#include "stdio.h"
 
 
-#endif /* SERIAL_H_ */
+int hc04_at_command(const char* command, const char* param) {
+    uint8_t req_resp[20] = {0};
+    sprintf((char*)req_resp, "AT + %s%s", command, param);
+    
+    usart0_write(req_resp, strlen((char*)req_resp) + 1);
+    usart0_read(req_resp, sizeof(req_resp));
+    
+    if (req_resp[0] == 'O' && req_resp[1] == 'K')
+      return 0; // No error.
+    
+    return -1;
+}

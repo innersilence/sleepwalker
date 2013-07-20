@@ -165,16 +165,28 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="error.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="error.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hc04.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hc04.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="led.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="led.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="serial.c">
+    <Compile Include="usart.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="serial.h">
+    <Compile Include="usart.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="sleepwalker.c">

@@ -22,12 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#include "serial.h"
+#ifndef HC04_H_
+#define HC04_H_
 
-void serial_init(uint16_t bauld, uint8_t parity) {
-   
-}
+// HC-04 Bluetooth module from Deal Extreme 
+// http://dx.com/p/wireless-bluetooth-rs232-ttl-transceiver-module-80711
+// Specifications: http://m2.img.dxcdn.com/CDDriver/sku.80711.pdf
 
-void serial_write(const uint8_t* buffer, int16_t size) {
-   
-}
+// Pin-out: Antenna to the left. Pins counterclockwise starting from 1 to 34
+// USART TX - pin 1
+// USART RX - pin 2
+// Vcc - pin 12
+// GND - pin 13
+
+
+int hc04_at_command(const char* command, const char* param);
+
+
+#endif // HC04_H_
+

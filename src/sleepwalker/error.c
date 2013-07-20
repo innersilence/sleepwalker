@@ -22,34 +22,33 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+#include "sleepwalker.h"
+
 #include <avr/io.h>
+#include <util/delay.h>
 
-#include "led.h"
+#include "error.h"
 
-// Pin controls IR LED (PD.3)
 
-void led_ir_pin_output(void) {
-   DDRD |= _BV(PORTD3);
+void error(const char* code) {
+   while (1) {
+      for (int i = 0; i <3; ++ i) {
+         DDRB |= _BV(DDB5); // Turn led on.
+         switch (code[i]) {
+            case '.':
+               _delay_ms(ERROR_DOT);
+            case '-':
+               _delay_ms(ERROR_DASH);
+         } 
+         _delay_ms(ERROR_INTERVAL); 
+         PORTB &= ~_BV(DDB5); // Turn led off. 
+         _delay_ms(ERROR_INTERVAL);
+         DDRB |= _BV(DDB5); // Turn led on.     
+      }
+   }  
 }
 
-void led_ir_on(void) {
-   PORTD |= _BV(PORTD3);
-}
 
-void led_ir_off(void) {
-   PORTD &= ~_BV(PORTD3);
-}
-
-// Pin controls Red LED (PD.2)
-
-void led_red_pin_output(void) {
-   DDRD |= _BV(PORTD2);
-}
-
-void led_red_on(void) {
-   PORTD |= _BV(PORTD2);
-}
-
-void led_red_off() {
-  PORTD &= ~_BV(PORTD2);
+void error_hc04_command_failed() {
+   error("..-");
 }

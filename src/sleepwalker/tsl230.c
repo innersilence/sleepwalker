@@ -44,7 +44,7 @@ void tsl230_s0_pin_output() {
 }
 
 void tsl230_s0_low() {
-   PORTD ^= _BV(PORTD4);
+   PORTD &= ~_BV(PORTD4);
 }
 
 void tsl230_s0_high() {
@@ -56,7 +56,7 @@ void tsl230_s1_pin_output() {
 }
 
 void tsl230_s1_low() {
-   PORTD ^= _BV(PORTD5);
+   PORTD &= ~_BV(PORTD5);
 }
 
 void tsl230_s1_high() {
@@ -68,7 +68,7 @@ void tsl230_s2_pin_output() {
 }
 
 void tsl230_s2_low() {
-   PORTD ^= _BV(PORTD6);
+   PORTD &= ~_BV(PORTD6);
 }
 
 void tsl230_s2_high() {
@@ -80,7 +80,7 @@ void tsl230_s3_pin_output() {
 }
 
 void tsl230_s3_low() {
-   PORTD ^= _BV(PORTD7);
+   PORTD &= ~_BV(PORTD7);
 }
 
 void tsl230_s3_high() {
@@ -93,7 +93,7 @@ void tsl230_oe_pin_output() {
 }
 
 void tsl230_oe_low() {
-   PORTB ^= _BV(PORTB1);
+   PORTB &= ~_BV(PORTB1);
 }
 
 void tsl230_oe_high() {
@@ -117,11 +117,11 @@ void tls230_timer1_enable(void) {
 }
 
 void tls230_timer1_disable(void) {
-   TIMSK1 ^= _BV(ICIE1); // Enable Input Capture Interrupt. (p.139)
-   TIMSK1 ^= _BV(TOIE1); // Enable overflow (p.139)
+   TIMSK1 &= ~_BV(ICIE1); // Enable Input Capture Interrupt. (p.139)
+   TIMSK1 &= ~_BV(TOIE1); // Enable overflow (p.139)
    
-   TIFR1 ^= _BV(ICF1); // Event Capture enabled on ICP1 pin. (p.140)
-   TIFR1 ^= _BV(TOV1); // ??   
+   TIFR1 &= ~_BV(ICF1); // Event Capture enabled on ICP1 pin. (p.140)
+   TIFR1 &= ~_BV(TOV1); // ??   
 }
 
 void tsl230_init(void) {     
@@ -197,7 +197,7 @@ short tsl230_ready(void) {
 ISR(TIMER1_CAPT_vect) {
    if (timer1_edge == EDGE_RISING) {
       timer1_rising_capture = ICR1;     
-      TCCR1B ^= _BV(ICES1); // Change capture on falling edge.      
+      TCCR1B &= ~_BV(ICES1); // Change capture on falling edge.      
       timer1_falling_overflow_counter = 0; // Reset overflows.
    } else if (timer1_edge == EDGE_FALLING) {
       timer1_falling_capture = ICR1;      

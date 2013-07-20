@@ -22,34 +22,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#include <avr/io.h>
 
-#include "led.h"
+#ifndef ERROR_H_
+#define ERROR_H_
 
-// Pin controls IR LED (PD.3)
+#define ERROR_DOT 100
+#define ERROR_DASH 300
+#define ERROR_INTERVAL 50
 
-void led_ir_pin_output(void) {
-   DDRD |= _BV(PORTD3);
-}
+// Blink simple diagnostics messages using build in LED.
 
-void led_ir_on(void) {
-   PORTD |= _BV(PORTD3);
-}
+void error_hc04_command_failed();
 
-void led_ir_off(void) {
-   PORTD &= ~_BV(PORTD3);
-}
 
-// Pin controls Red LED (PD.2)
-
-void led_red_pin_output(void) {
-   DDRD |= _BV(PORTD2);
-}
-
-void led_red_on(void) {
-   PORTD |= _BV(PORTD2);
-}
-
-void led_red_off() {
-  PORTD &= ~_BV(PORTD2);
-}
+#endif /* ERROR_H_ */
