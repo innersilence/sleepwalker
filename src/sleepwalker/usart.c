@@ -22,70 +22,64 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+#include "sleepwalker.h"
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <string.h>
 
-#include "sleepwalker.h"
 #include "usart.h"
 
 
-usart_buffer the_buffer;
 
-
-void usart0_init(uint16_t baud) {
-   uint16_t baud_value = (F_CPU / (baud * 16UL)) - 1;
-   
-   UBRR0H = (uint8_t)(baud_value >> 8);
-   UBRR0L = (uint8_t)baud_value;
-   
-   UCSR0C |= (1 << UCSZ01) | (1 << UCSZ00); // Set frame format to 8 data bits, no parity, 1 stop bit.   
-   UCSR0B |= (1 << RXEN0) | (1 << RXCIE0);  // Enable reception and RC complete interrupt.
-}
-
-
-void usart0_buffer_init(usart_buffer* buffer) {
-   buffer->index = 0;
-}
-
-
-uint8_t usart0_write(usart_buffer* buffer, uint8_t byte) {
-   if (buffer->index < MAX_SBUFFER_SIZE) {
-      buffer->data[buffer->index] = byte;
-      buffer->index ++;
-      return 0;
+void usart0_send_byte(uint8_t byte) {
+   while (!(UCSR0A & (1 << UDRE0))) {
+      // Wait while previous byte is completed.
    }
+   UDR0 = byte; // Transmit data.
+}
+
+
+uint8_t usart0_receive_byte() {
+   while (!(UCSR0A & (1 << RXC0))) {
+      // Wait for byte to be received.
+   }
+   return UDR0;
+}
+
+
+uint8_t usart0_baud_rate(uint16_t baud) {
+   UCSR0B = 0x0; // Disable USART.
    
+   uint16_t ubrr_value = F_CPU / baud / 16UL - 1;
+   
+   UBRR0H = (uint8_t)(ubrr_value >> 8); // Set baud rate (high then low bytes).
+   UBRR0L = (uint8_t)ubrr_value;
+   
+   UCSR0C |= (1 << UCSZ01) | (1 << UCSZ00); // Set frame format to 8 data bits, no parity, 1 stop bit.
+   UCSR0B |= (1 << RXEN0) | (1 << TXEN0);   // Enable transmission and reception.
+   
+   usart0_send_line("AT"); // Send "AT" wait for "OK".
+   return usart0_receive_ok();
+}
+
+
+uint8_t usart0_send_line(const char* str) {
+   int len = strlen(str);
+   for (int i = 0; i < len; ++ i) {
+      usart0_send_byte(str[i]);
+   }
    return 1;
 }
 
 
-uint8_t usart0_read(usart_buffer* buffer, volatile uint8_t* byte) {
-   if (buffer->index > 0) {
-      buffer->index --;
-      *byte = buffer->data[buffer->index];
-      return 0;
-   }
-   
-   return 1;
+uint8_t usart0_receive_ok() {
+   char ok[2] = {0};
+   ok[0] = usart0_receive_byte();
+   ok[1] = usart0_receive_byte();
+   if ((ok[0] == 'o' || ok[0] == 'O') && (ok[1] == 'k' || ok[1] == 'K'))
+      return 1;
+
+   return 0;
 }
 
-
-ISR(USART_RX_vect) {
-   uint8_t byte = UDR0;
-   
-   if ((usart0_write(&the_buffer, byte) == 1) || (byte == '.')) { // Check if period char or end of buffer.     
-      UCSR0B &= ~((1 << RXEN0) | (1 << RXCIE0)); // Disable reception and RX Complete interrupt.      
-      UCSR0B |= (1 << TXEN0) | (1 << UDRIE0); // Enable transmission and UDR0 empty interrupt.
-   }
-}
-
-
-ISR(USART_UDRE_vect) {
-   // If index is not at start of buffer.
-   if (usart0_read(&the_buffer, &UDR0) == 1) {
-      usart0_buffer_init(&the_buffer); // start over, reset buffer.
-      
-      UCSR0B &= ~((1 << TXEN0) | (1 << UDRIE0)); // Disable transmission and UDR0 empty interrupt.     
-      UCSR0B |= (1 << RXEN0) | (1 << RXCIE0); // Enable reception and RC complete interrupt.
-   }
-}

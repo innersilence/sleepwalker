@@ -22,21 +22,51 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+#include <string.h>
+#include <stdio.h>
+
 #include "hc04.h"
 #include "usart.h"
-#include "string.h"
-#include "stdio.h"
 
 
-/*int hc04_at_command(const char* command, const char* param) {
-    uint8_t req_resp[20] = {0};
-    sprintf((char*)req_resp, "AT + %s%s", command, param);
-    
-    usart0_write(req_resp, strlen((char*)req_resp) + 1);
-    usart0_read(req_resp, sizeof(req_resp));
-    
-    if (req_resp[0] == 'O' && req_resp[1] == 'K')
-      return 0; // No error.
-    
-    return -1;
-}*/
+
+int hc04_baud_rate(uint16_t baud) {
+   int ok_send = 0;
+   switch (baud) {
+      case 1200:
+          ok_send = usart0_send_line("AT + BAUD1");
+      case 2400:
+         ok_send = usart0_send_line("AT + BAUD2");
+      case 4800:
+         ok_send = usart0_send_line("AT + BAUD3");
+      case 9600:
+         ok_send = usart0_send_line("AT + BAUD4");
+      case 19200:
+         ok_send = usart0_send_line("AT + BAUD5");
+      case 38400:
+         ok_send = usart0_send_line("AT + BAUD6");
+      case 57600:
+         ok_send = usart0_send_line("AT + BAUD7");
+      //case 115200:
+      //   ok_send = usart0_send_line("AT + BAUD8");
+      default:
+         return 0;
+   }
+   
+   if (!ok_send)
+      return 0;
+   
+   return usart0_receive_ok();   
+}
+
+int hc04_device_name(const char* name) {
+   char buffer[32]; // "AT + NAME[device_name_20char_max]";
+   if (strlen(name) > 20)
+      return 0;
+      
+   sprintf(buffer, "AT + NAME%s", name);
+   if (usart0_send_line(buffer))
+      return usart0_receive_ok();
+      
+   return 0;
+}

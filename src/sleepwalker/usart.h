@@ -27,17 +27,8 @@ THE SOFTWARE.
 
 #include <stdint.h>
 
-#define MAX_SBUFFER_SIZE 20
-
-typedef struct {
-   uint8_t data[MAX_SBUFFER_SIZE];
-   uint8_t index;
-} usart_buffer;
-
-
-void usart0_init(uint16_t baud);
-uint8_t usart0_write(usart_buffer* buffer, uint8_t byte);
-uint8_t usart0_read(usart_buffer* buffer, volatile uint8_t* byte);
-
+uint8_t usart0_baud_rate(uint16_t baud);
+uint8_t usart0_send_line(const char* str);
+uint8_t usart0_receive_ok(void);
 
 #endif /* USART_H_ */

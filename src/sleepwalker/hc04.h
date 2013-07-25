@@ -25,18 +25,10 @@ THE SOFTWARE.
 #ifndef HC04_H_
 #define HC04_H_
 
-// HC-04 Bluetooth module from Deal Extreme 
-// http://dx.com/p/wireless-bluetooth-rs232-ttl-transceiver-module-80711
-// Specifications: http://m2.img.dxcdn.com/CDDriver/sku.80711.pdf
+#include <stdint.h>
 
-// Pin-out: Antenna to the left. Pins counterclockwise starting from 1 to 34
-// USART TX - pin 1
-// USART RX - pin 2
-// Vcc - pin 12
-// GND - pin 13
-
-
-int hc04_at_command(const char* command, const char* param);
+int hc04_baud_rate(uint16_t baud);
+int hc04_device_name(const char* name);
 
 
 #endif // HC04_H_
