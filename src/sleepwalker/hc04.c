@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "stdio.h"
 
 
-int hc04_at_command(const char* command, const char* param) {
+/*int hc04_at_command(const char* command, const char* param) {
     uint8_t req_resp[20] = {0};
     sprintf((char*)req_resp, "AT + %s%s", command, param);
     
@@ -39,4 +39,4 @@ int hc04_at_command(const char* command, const char* param) {
       return 0; // No error.
     
     return -1;
-}
+}*/

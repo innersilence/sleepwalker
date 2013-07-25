@@ -26,7 +26,6 @@ THE SOFTWARE.
 #define SLEEPWALKER_H_
 
 #define F_CPU 8000000UL // CPU clock 8 MHz.
-#define POLL_FREQ_HZ 20 // 20 times per second.
 
 /*
 PB.0 - TSL230 Interrupt Capture pin
@@ -49,8 +48,8 @@ PD.7 - TSL230 S3 pin
 
 GND - HC-04 GND (pin 13)
 3V3 - HC-04 +3.3v (pin 12)
-RX1 - HC-04 USART_RX (pin 2)
-TX1 - HC-04 USART_TX (pin 1)
+RX1 - HC-04 USART_TX (pin 1)
+TX1 - HC-04 USART_RX (pin 2)
 */
 
 #endif /* SLEEPWALKER_H_ */

@@ -36,5 +36,8 @@ THE SOFTWARE.
 
 void error_hc04_command_failed();
 
+void blink_error(const char* err);
+void blink();
+
 
 #endif /* ERROR_H_ */

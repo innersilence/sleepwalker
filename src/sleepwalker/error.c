@@ -52,6 +52,14 @@ void blink_error(const char* code) {
    }  
 }
 
+void blink() {
+   DDRB |= _BV(DDB5);            // PB.5 output.
+   PORTB |= _BV(DDB5);           // PB.5 high.
+   _delay_ms(ERROR_DOT);
+   PORTB &= ~_BV(DDB5);          // PB.5 low.
+   _delay_ms(ERROR_INTERVAL);    // keep low.  
+}
+
 
 void error_hc04_command_failed() {
    blink_error("....-");

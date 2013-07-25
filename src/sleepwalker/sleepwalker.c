@@ -34,15 +34,29 @@ THE SOFTWARE.
 #include "error.h"
 
 
+
+#include <string.h>
+#define USART_BAUDRATE 9600
+#define UBRR_VALUE (((F_CPU / (USART_BAUDRATE * 16UL))) - 1)
+void test_usart(void);
+
+uint8_t usart_test_baud_rate(uint16_t baud);
+uint8_t usart_send_line(const char* str);
+
+
 int main(void) {  
-   usart0_init(9600);
-   
-   sei();
-   
-   if (0 > hc04_at_command("NAME", "baboom.me")) // Test communication with BT module by changing its name.
-      error_hc04_command_failed();       
+
+   if (usart_test_baud_rate(9600)) {
+      while (1) {
+         usart_send_line("hello, world!");
+         blink();
+      }
+   } else
+      blink_error("---");
    
    /*usart0_init(38400);
+   
+   sei();
      
    if (0 >  hc04_at_command("BAUD", "6")) // Try to set baud rate to 34000
       usart0_init(9600); // Failed. Use defaults (9600 baud to communicate with BT module)
@@ -86,3 +100,79 @@ int main(void) {
       _delay_ms(1000 / POLL_FREQ_HZ);
    }*/      
 }
+
+void test_usart0_send_byte(uint8_t byte) {   
+   while (!(UCSR0A & (1 << UDRE0))) {
+      // Wait while previous byte is completed.   
+   }   
+   UDR0 = byte; // Transmit data.
+}
+
+uint8_t test_usart0_receive_byte() {   
+   while (!(UCSR0A & (1 << RXC0))) {
+      // Wait for byte to be received.
+   } 
+   return UDR0;
+}
+
+uint8_t usart_test_baud_rate(uint16_t baud) {
+   UCSR0B = 0x0; // Disable USART.
+   
+   uint16_t ubrr_value = F_CPU / baud / 16UL - 1;
+   
+   UBRR0H = (uint8_t)(ubrr_value >> 8); // Set baud rate (high then low bytes).
+   UBRR0L = (uint8_t)ubrr_value;
+   
+   UCSR0C |= (1 << UCSZ01) | (1 << UCSZ00); // Set frame format to 8 data bits, no parity, 1 stop bit.
+   UCSR0B |= (1 << RXEN0) | (1 << TXEN0);   // Enable transmission and reception.
+   
+   const char* command = "AT";
+   for (int i = 0; i < strlen(command); ++ i) {
+      test_usart0_send_byte(command[i]);
+   }
+   
+   char ok[2];
+   ok[0] = test_usart0_receive_byte();
+   ok[1] = test_usart0_receive_byte();
+   if ((ok[0] == 'o' || ok[0] == 'O') && (ok[1] == 'k' || ok[1] == 'K'))
+     return 1;
+
+   return 0;
+}
+
+
+uint8_t usart_send_line(const char* str) {
+   int len = strlen(str);
+   for (int i = 0; i < len; ++ i) {
+      test_usart0_send_byte(str[i]);
+   }
+   return 1;
+}
+
+
+void test_usart(void) {   
+   UBRR0H = (uint8_t)(UBRR_VALUE >> 8); // Set baud rate (high then low bytes).
+   UBRR0L = (uint8_t)UBRR_VALUE;
+      
+   UCSR0C |= (1 << UCSZ01) | (1 << UCSZ00); // Set frame format to 8 data bits, no parity, 1 stop bit.  
+   UCSR0B |= (1 << RXEN0) | (1 << TXEN0);   // Enable transmission and reception.
+   
+   //const char* command = "AT + NAMEbaboom.me";
+   //const char* command = "hello, world!";
+   const char* command = "AT";
+   for (int i = 0; i < strlen(command); ++ i) {
+      test_usart0_send_byte(command[i]);
+   }
+   
+   //blink_error(".");
+    
+   char ok = test_usart0_receive_byte(); // Blocks indefinitely...
+   if (ok == 'o' || ok == 'O')
+      blink_error("---");
+   else
+      blink_error("...");
+}
+
+// [-] terminate command with "\r\n", HC-06 doesn't need termination (HC-04, HC-05 do).
+// [?] AFio clock frequency? Has to be divided by 1.8432MHz.
+
