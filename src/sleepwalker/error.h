@@ -26,9 +26,11 @@ THE SOFTWARE.
 #ifndef ERROR_H_
 #define ERROR_H_
 
-#define ERROR_DOT 100
-#define ERROR_DASH 300
-#define ERROR_INTERVAL 50
+#define ERROR_DOT 300
+#define ERROR_DASH 1000
+#define ERROR_INTERVAL 200
+
+#define ERROR_REPEAT_AFTER 3000
 
 // Blink simple diagnostics messages using build in LED.
 

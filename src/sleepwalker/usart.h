@@ -31,13 +31,13 @@ THE SOFTWARE.
 
 typedef struct {
    uint8_t data[MAX_SBUFFER_SIZE];
-   uint8_t head;
-} cbuffer;
+   uint8_t index;
+} usart_buffer;
 
 
 void usart0_init(uint16_t baud);
-void usart0_write(const uint8_t* buffer, int16_t size);
-void usart0_read(uint8_t* buffer, int16_t size);
+uint8_t usart0_write(usart_buffer* buffer, uint8_t byte);
+uint8_t usart0_read(usart_buffer* buffer, volatile uint8_t* byte);
 
 
 #endif /* USART_H_ */

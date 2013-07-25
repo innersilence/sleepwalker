@@ -49,7 +49,7 @@
       </StimuliFile>
       <Channel>
         <host>127.0.0.1</host>
-        <port>50963</port>
+        <port>49234</port>
         <ssl>False</ssl>
       </Channel>
     </com_atmel_avrdbg_tool_simulator>
@@ -83,17 +83,17 @@
     </com_atmel_avrdbg_tool_stk500>
     <preserveEEPROM>False</preserveEEPROM>
     <com_atmel_avrdbg_tool_ispmk2>
-      <ToolType xmlns="">com.atmel.avrdbg.tool.ispmk2</ToolType>
-      <ToolName xmlns="">AVRISP mkII</ToolName>
-      <ToolNumber xmlns="">0000B0018801</ToolNumber>
-      <StimuliFile xmlns="">
+      <ToolType>com.atmel.avrdbg.tool.ispmk2</ToolType>
+      <ToolName>AVRISP mkII</ToolName>
+      <ToolNumber>0000B0018801</ToolNumber>
+      <StimuliFile>
       </StimuliFile>
-      <Channel xmlns="">
+      <Channel>
         <host>127.0.0.1</host>
-        <port>49192</port>
+        <port>49234</port>
         <ssl>False</ssl>
       </Channel>
-      <ToolOptions xmlns="">
+      <ToolOptions>
         <InterfaceName>ISP</InterfaceName>
         <InterfaceProperties>
           <JtagDbgClock>249000</JtagDbgClock>

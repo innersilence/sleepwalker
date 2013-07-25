@@ -35,7 +35,12 @@ THE SOFTWARE.
 
 
 int main(void) {  
-   error_hc04_command_failed(); // testing blinky.
+   usart0_init(9600);
+   
+   sei();
+   
+   if (0 > hc04_at_command("NAME", "baboom.me")) // Test communication with BT module by changing its name.
+      error_hc04_command_failed();       
    
    /*usart0_init(38400);
      

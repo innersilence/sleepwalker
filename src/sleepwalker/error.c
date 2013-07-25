@@ -26,29 +26,33 @@ THE SOFTWARE.
 
 #include <avr/io.h>
 #include <util/delay.h>
+#include <string.h>
 
 #include "error.h"
 
 
-void error(const char* code) {
+void blink_error(const char* code) {
+   DDRB |= _BV(DDB5); // PB.5 output.
    while (1) {
-      for (int i = 0; i <3; ++ i) {
-         DDRB |= _BV(DDB5); // Turn led on.
-         switch (code[i]) {
+      for (int i = 0; i < strlen(code); ++ i) {
+         PORTB |= _BV(DDB5);          // PB.5 high.
+         switch (code[i]) {           // keep high.
             case '.':
                _delay_ms(ERROR_DOT);
+               break;
             case '-':
                _delay_ms(ERROR_DASH);
-         } 
-         _delay_ms(ERROR_INTERVAL); 
-         PORTB &= ~_BV(DDB5); // Turn led off. 
-         _delay_ms(ERROR_INTERVAL);
-         DDRB |= _BV(DDB5); // Turn led on.     
+               break;
+         }
+         PORTB &= ~_BV(DDB5);         // PB.5 low.
+         _delay_ms(ERROR_INTERVAL);   // keep low.  
       }
+      
+      _delay_ms(ERROR_REPEAT_AFTER);
    }  
 }
 
 
 void error_hc04_command_failed() {
-   error("..-");
+   blink_error("....-");
 }
