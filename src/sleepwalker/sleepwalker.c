@@ -26,6 +26,8 @@ THE SOFTWARE.
 
 #include <util/delay.h>
 #include <avr/interrupt.h>
+#include <string.h>
+#include <stdio.h>
 
 #include "led.h"
 #include "tsl230.h"
@@ -34,61 +36,92 @@ THE SOFTWARE.
 #include "error.h"
 
 
+char buffer_16_bytes[16];
+
+// http://dronecolony.com/2008/11/13/arduino-and-the-taos-tsl230r-light-sensor-getting-started/
+
+
+
+uint32_t led_ir_take_measurement() {
+   uint32_t val = 0;
+   
+   blink();
+   
+   /*led_ir_on();
+   sei(); // Enable interrupts.
+   
+   tsl230_start();
+   while(0 != tsl230_ready()) {}
+   val = tsl230_read();
+   
+   cli(); // Disable interrupts.
+   led_ir_off();*/
+   
+   return val;
+}
+
+
+uint32_t led_red_take_measurement() {
+   uint32_t val = 0;
+   
+   blink();
+   
+   /*led_red_on();
+   sei(); // Enable interrupts.
+   
+   tsl230_start();
+   while(0 != tsl230_ready()) {}
+   val = tsl230_read();
+   
+   cli(); // Disable interrupts.
+   led_red_off();*/
+   
+   return val;
+}
+
 
 int main(void) {  
+   blink_init();
+
    // After reset BT module communicates at 9600 baud, no parity, 8 data and 1 stop bit.
-   // Set USART to these settings.
-   if (0 != usart0_baud_rate(9600)) 
+   // Set USART baud rate to 9600.
+   if (0 != usart0_baud_rate(BLUETOOTH_MODULE_DEFAULT_BAUD_RATE)) 
       blink_error(".");
    
-   // Change BT module name to baboom.me.  
-   if (0 != hc04_device_name("fingr.baboom.me"))
+   // Change BT module name to 'baboom.me'.  
+   if (0 != hc04_device_name("baboom.me"))
       blink_error("..");
-   
-   // Change BT module to 38400.   
-   if (0 != hc04_baud_rate(38400))
+
+   // Change BT module baud rate to 38400.   
+   if (0 != hc04_baud_rate(BLUETOOTH_MODULE_BAUD_RATE))
       blink_error("...");
-   
-   // Set USART to 38400      
-   if (0 != usart0_baud_rate(38400))
-      blink_error("....");
+        
+   // Set USART baud rate to 38400.      
+   if (0 != usart0_baud_rate(BLUETOOTH_MODULE_BAUD_RATE))
+      blink_error("...."); 
       
-   while (1) {
-      blink_error("-");
-      usart0_send_line("red[0000]");
-      usart0_send_line("ir[0000]");
-      //blink_error("-");
-   }     
-   
-   /*led_ir_pin_output();
+   //while (1) {blink(); _delay_ms(100);}
+      
+   // Setup LED pins.
+   led_ir_pin_output();
    led_red_pin_output();
 
+   // Initialize TSL230.
    tsl230_init();
    tsl230_sensitivity(X1);
    tsl230_scaling(DIV_BY_1);
-  
-   //sei();
-   
-   uint16_t values[2] = {0};
+     
+   // Start taking measurements.
+   uint32_t micro_watts_per_centimeter_squared;
    while(1) {
-      // Measure IR LED.
-      led_ir_on();
-      tsl230_start();
-      while(0 != tsl230_ready()) {}
-      values[0] = tsl230_read();
-      led_ir_off();
-      
-      // Measure red LED.
-      led_red_on();
-      tsl230_start();
-      while(0 != tsl230_ready()) {}
-      values[1] = tsl230_read();
-      led_red_off();
-      
-      // Send measurements to collector.
-      usart0_write((uint8_t*)values, sizeof(values));
-      _delay_ms(1000 / POLL_FREQ_HZ);
-   }*/      
+      micro_watts_per_centimeter_squared = led_ir_take_measurement(); // Take measurement of IR LED.
+      sprintf(buffer_16_bytes, " ir[%04lu]", micro_watts_per_centimeter_squared);
+      usart0_send_line(buffer_16_bytes);
+         
+      micro_watts_per_centimeter_squared = led_red_take_measurement(); // Take measurement of red LED.
+      sprintf(buffer_16_bytes, "red[%04lu]", micro_watts_per_centimeter_squared);
+      usart0_send_line(buffer_16_bytes);
+   }  
 }
 
 

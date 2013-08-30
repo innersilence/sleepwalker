@@ -34,8 +34,7 @@ THE SOFTWARE.
 
 // Blink simple diagnostics messages using build in LED.
 
-void error_hc04_command_failed();
-
+void blink_init();
 void blink_error(const char* err);
 void blink();
 
