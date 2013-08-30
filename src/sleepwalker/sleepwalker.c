@@ -36,32 +36,29 @@ THE SOFTWARE.
 
 
 int main(void) {  
-
-   if (usart0_baud_rate(9600)) {
-      while (1) {
-         usart0_send_line("red[0000]");
-         blink();
-         usart0_send_line("ir[0000]");
-         blink();
-      }
-   } else
-      blink_error("---");
+   // After reset BT module communicates at 9600 baud, no parity, 8 data and 1 stop bit.
+   // Set USART to these settings.
+   if (0 != usart0_baud_rate(9600)) 
+      blink_error(".");
    
-   /*usart0_init(38400);
+   // Change BT module name to baboom.me.  
+   if (0 != hc04_device_name("fingr.baboom.me"))
+      blink_error("..");
    
-   sei();
-     
-   if (0 >  hc04_at_command("BAUD", "6")) // Try to set baud rate to 34000
-      usart0_init(9600); // Failed. Use defaults (9600 baud to communicate with BT module)
-    
-   if (0 <  hc04_at_command("BAUD", "6")) // Set baud rate to 38400.
-      usart0_init(38400); // Configure USART to use 38400 too.
+   // Change BT module to 38400.   
+   if (0 != hc04_baud_rate(38400))
+      blink_error("...");
+   
+   // Set USART to 38400      
+   if (0 != usart0_baud_rate(38400))
+      blink_error("....");
       
-   if (0 > hc04_at_command("NAME", "baboom.me")) { // Test communication with BT module by changing its name.
-      error_hc04_command_failed(); // Never exits, blinks diagnostics.
-   }*/      
-      
-   
+   while (1) {
+      blink_error("-");
+      usart0_send_line("red[0000]");
+      usart0_send_line("ir[0000]");
+      //blink_error("-");
+   }     
    
    /*led_ir_pin_output();
    led_red_pin_output();
@@ -69,7 +66,7 @@ int main(void) {
    tsl230_init();
    tsl230_sensitivity(X1);
    tsl230_scaling(DIV_BY_1);
-   
+  
    //sei();
    
    uint16_t values[2] = {0};

@@ -22,8 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+#include "sleepwalker.h"
+
 #include <string.h>
 #include <stdio.h>
+#include <util/delay.h>
 
 #include "hc04.h"
 #include "usart.h"
@@ -31,42 +34,51 @@ THE SOFTWARE.
 
 
 int hc04_baud_rate(uint16_t baud) {
-   int ok_send = 0;
+   int err = 0;
    switch (baud) {
       case 1200:
-          ok_send = usart0_send_line("AT + BAUD1");
+          err = usart0_send_line("AT+BAUD1");
+          break;
       case 2400:
-         ok_send = usart0_send_line("AT + BAUD2");
+         err = usart0_send_line("AT+BAUD2");
+         break;
       case 4800:
-         ok_send = usart0_send_line("AT + BAUD3");
+         err = usart0_send_line("AT+BAUD3");
+         break;
       case 9600:
-         ok_send = usart0_send_line("AT + BAUD4");
+         err = usart0_send_line("AT+BAUD4");
+         break;
       case 19200:
-         ok_send = usart0_send_line("AT + BAUD5");
+         err = usart0_send_line("AT+BAUD5");
+         break;
       case 38400:
-         ok_send = usart0_send_line("AT + BAUD6");
+         err = usart0_send_line("AT+BAUD6");
+         break;
       case 57600:
-         ok_send = usart0_send_line("AT + BAUD7");
+         err = usart0_send_line("AT+BAUD7");
+         break;
       //case 115200:
-      //   ok_send = usart0_send_line("AT + BAUD8");
+      //   err = usart0_send_line("AT+BAUD8");
+      //   break;
       default:
-         return 0;
+         return 1;
    }
    
-   if (!ok_send)
-      return 0;
-   
-   return usart0_receive_ok();   
+   // Don't wait for OK since USART is still using old baud rate.
+   return err; 
 }
 
 int hc04_device_name(const char* name) {
-   char buffer[32]; // "AT + NAME[device_name_20char_max]";
+   char buffer[32]; // "AT+NAME[device_name_20_char_max]\r\n";
+   
    if (strlen(name) > 20)
-      return 0;
+      return 1;
       
-   sprintf(buffer, "AT + NAME%s", name);
-   if (usart0_send_line(buffer))
+   sprintf(buffer, "AT+NAME%s", name);
+   if (0 == usart0_send_line(buffer)) {
+      _delay_ms(1000);
       return usart0_receive_ok();
+   }      
       
-   return 0;
+   return 1;
 }

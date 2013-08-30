@@ -69,7 +69,7 @@ uint8_t usart0_send_line(const char* str) {
    for (int i = 0; i < len; ++ i) {
       usart0_send_byte(str[i]);
    }
-   return 1;
+   return 0;
 }
 
 
@@ -77,9 +77,10 @@ uint8_t usart0_receive_ok() {
    char ok[2] = {0};
    ok[0] = usart0_receive_byte();
    ok[1] = usart0_receive_byte();
+   
    if ((ok[0] == 'o' || ok[0] == 'O') && (ok[1] == 'k' || ok[1] == 'K'))
-      return 1;
+      return 0;
 
-   return 0;
+   return 1;
 }
 
