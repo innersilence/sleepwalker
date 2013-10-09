@@ -29,7 +29,8 @@ THE SOFTWARE.
 
 int hc04_baud_rate(uint16_t baud);
 int hc04_device_name(const char* name);
-
+void hc04_init();
+void hc04_reset();
 
 #endif // HC04_H_
 

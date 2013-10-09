@@ -27,10 +27,55 @@ THE SOFTWARE.
 #include <string.h>
 #include <stdio.h>
 #include <util/delay.h>
+#include <avr/io.h>
 
 #include "hc04.h"
 #include "usart.h"
+#include "error.h"
 
+
+void hc04_reset_pin_output(void) {
+   DDRB |= _BV(PORTB2);
+}
+
+
+void hc04_reset_high(void) {
+   PORTB |= _BV(PORTB2);
+}
+
+
+void hc04_reset_low(void) {
+   PORTB &= ~_BV(PORTB2);
+}
+
+
+void hc04_reset() {
+   hc04_reset_low();
+   _delay_ms(1000);
+   hc04_reset_high();
+}
+
+
+void hc04_init() {
+   // Reset BT module.
+   hc04_reset_pin_output();
+   hc04_reset();
+   
+   // Change BT module baud rate & name.
+   if (0 != usart0_baud_rate(9600)) // Test if BT module respond @ 9600 (i.e. default settings).
+      blink_error(".");
+
+   //if (0 != hc04_baud_rate(38400)) // BT module is using default settings, set higher (38400) baud rate.
+   //   blink_error("..");
+   
+   //if (0 != usart0_baud_rate(38400)) // Set USART baud rate to match BT module.
+   //   blink_error("...");
+
+   if (0 != hc04_device_name("58.baboom.me")) // Set BT module name.
+      blink_error("....");
+
+   blink_error("----");
+}
 
 
 int hc04_baud_rate(uint16_t baud) {
@@ -64,21 +109,74 @@ int hc04_baud_rate(uint16_t baud) {
          return 1;
    }
    
+   if (err == 0)
+      return usart0_receive_ok();
+      
    // Don't wait for OK since USART is still using old baud rate.
    return err; 
 }
 
-int hc04_device_name(const char* name) {
-   char buffer[32]; // "AT+NAME[device_name_20_char_max]\r\n";
-   
+
+int hc04_device_name(const char* name) {     
    if (strlen(name) > 20)
       return 1;
       
+   char buffer[32]; // "AT+NAME[device_name_20_char_max]";   
    sprintf(buffer, "AT+NAME%s", name);
+   
    if (0 == usart0_send_line(buffer)) {
-      _delay_ms(1000);
+      _delay_ms(USART_DELAY_MS);
       return usart0_receive_ok();
    }      
       
    return 1;
 }
+
+
+/*
+Q. Module does not respond @ any baud rate (9600, 38400, 57600)
+T. Set to 57600 then error is too high cannot recognize response.
+A. Connect module to a PC and set baud rate from terminal.
+
+
+Applying 'low' to reset pin (11) does not reset it (neither name, nor baud rate)
+
+http://www.elecfreaks.com/wiki/index.php?title=Bluetooth_Bee
+*/
+/*
+int hc04_test_baud_rate() {
+   char o, k;
+   
+   o = '-', k = '-';
+   usart0_baud_rate(9600);
+   usart0_send_line("AT");
+   blink();
+   o = usart0_receive_byte_with_timeout();
+   k = usart0_receive_byte_with_timeout();
+   if ((o == 'o' || o == 'O') && (k == 'k' || k == 'K'))
+   blink_error("-");
+
+   o = '-', k = '-';
+   usart0_baud_rate(38400);
+   usart0_send_line("AT");
+   blink();
+   o = usart0_receive_byte_with_timeout();
+   k = usart0_receive_byte_with_timeout();
+   if ((o == 'o' || o == 'O') && (k == 'k' || k == 'K'))
+   blink_error("--");
+   
+   o = '-', k = '-';
+   usart0_baud_rate(57600);
+   usart0_send_line("AT");
+   blink();
+   o = usart0_receive_byte_with_timeout();
+   k = usart0_receive_byte_with_timeout();
+   if ((o == 'o' || o == 'O') && (k == 'k' || k == 'K'))
+   blink_error("---");
+   
+   //usart0_send_line("AT+NAMEbaboom.me\r\n");
+   //if (0 == usart0_receive_ok())
+   //   blink_error("---");
+   //blink_error("---");
+   return 0;
+}*/

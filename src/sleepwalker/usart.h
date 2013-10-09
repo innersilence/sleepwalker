@@ -27,8 +27,12 @@ THE SOFTWARE.
 
 #include <stdint.h>
 
+#define USART_DELAY_MS 300
+
 uint8_t usart0_baud_rate(uint16_t baud);
 uint8_t usart0_send_line(const char* str);
 uint8_t usart0_receive_ok(void);
+
+uint8_t usart0_receive_byte_with_timeout(void);
 
 #endif /* USART_H_ */

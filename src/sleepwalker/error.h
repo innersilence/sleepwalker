@@ -32,9 +32,8 @@ THE SOFTWARE.
 
 #define ERROR_REPEAT_AFTER 3000
 
-// Blink simple diagnostics messages using build in LED.
 
-void blink_init();
+// Blink simple diagnostics messages using built in LED.
 void blink_error(const char* err);
 void blink();
 

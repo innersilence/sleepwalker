@@ -49,7 +49,7 @@
       </StimuliFile>
       <Channel>
         <host>127.0.0.1</host>
-        <port>50721</port>
+        <port>50405</port>
         <ssl>False</ssl>
       </Channel>
     </com_atmel_avrdbg_tool_simulator>

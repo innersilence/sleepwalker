@@ -25,23 +25,21 @@ THE SOFTWARE.
 #ifndef SLEEPWALKER_H_
 #define SLEEPWALKER_H_
 
-#define F_CPU 8000000UL // CPU clock 8 MHz.
-
-#define BLUETOOTH_MODULE_DEFAULT_BAUD_RATE 9600
-#define BLUETOOTH_MODULE_BAUD_RATE 38400
+#define F_CPU 8000000UL // CPU clock 8 MHz. 
 
 /*
 PB.0 - TSL230 Interrupt Capture pin (FIO's D8)
 PB.1 - TSL230 OE pin (FIO's D9)
+PB.2 - Connected to pin 5 of the shield to reset BT module on power up (FIO's D10)
 
-PB.2 
-PB.3 - AVRISP (mosi/miso)
-
-PB.6
+PB.3 - AVRISP (mosi)
+PB.4 - AVRIPS (miso)
+PB.5 - On board LED
+PB.6 - Taken by external OSC
 PB.7 - Taken by external OSC
 
-PD.0 - Bluetooth RX pin
-PD.1 - Bluetooth TX pin
+PD.0 - Bluetooth RX pin (connected to shield)
+PD.1 - Bluetooth TX pin (connected to shield)
 PD.2 - Red LED pin (FIO's D2)
 PD.3 - IR LED pin (FIO's D3)
 PD.4 - TSL230 S0 pin (FIO's D4)
@@ -49,10 +47,10 @@ PD.5 - TSL230 S1 pin (FIO's D5)
 PD.6 - TSL230 S2 pin (FIO's D6)
 PD.7 - TSL230 S3 pin (FIO's D7)
 
-GND - HC-04 GND (pin 13)
-3V3 - HC-04 +3.3v (pin 12)
-RX1 - HC-04 USART_TX (pin 1)
-TX1 - HC-04 USART_RX (pin 2)
+//GND - HC-04 GND (pin 13)
+//3V3 - HC-04 +3.3v (pin 12)
+//RX1 - HC-04 USART_TX (pin 1)
+//TX1 - HC-04 USART_RX (pin 2)
 */
 
 #endif /* SLEEPWALKER_H_ */

@@ -30,13 +30,13 @@ THE SOFTWARE.
 
 #include "error.h"
 
-void blink_init() {
+/*void blink_init() {
    DDRB |= _BV(DDB5);            // PB.5 output.
-}
+}*/
 
 
 void blink_error(const char* code) {
-   //DDRB |= _BV(DDB5); // PB.5 output.
+   DDRB |= _BV(DDB5); // PB.5 output.
    while (1) {
       for (int i = 0; i < strlen(code); ++ i) {
          PORTB |= _BV(DDB5);          // PB.5 high.
@@ -57,7 +57,7 @@ void blink_error(const char* code) {
 }
 
 void blink() {   
-   //DDRB |= _BV(DDB5);            // PB.5 output.
+   DDRB |= _BV(DDB5);            // PB.5 output.
    PORTB |= _BV(DDB5);           // PB.5 high.
    _delay_ms(ERROR_DOT);
    PORTB &= ~_BV(DDB5);          // PB.5 low.
