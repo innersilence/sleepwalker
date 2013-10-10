@@ -71,13 +71,14 @@ void hc04_init() {
    //if (0 != usart0_baud_rate(38400)) // Set USART baud rate to match BT module.
    //   blink_error("...");
 
-   if (0 != hc04_device_name("58.baboom.me")) // Set BT module name.
+   if (0 != hc04_device_name("baboom.me")) // Set BT module name.
       blink_error("....");
 
    blink_error("----");
 }
 
 
+// http://thingylab.com/wiki/hc06_linvor_1.5_at_command_set
 int hc04_baud_rate(uint16_t baud) {
    int err = 0;
    switch (baud) {
@@ -121,11 +122,10 @@ int hc04_device_name(const char* name) {
    if (strlen(name) > 20)
       return 1;
       
-   char buffer[32]; // "AT+NAME[device_name_20_char_max]";   
+   char buffer[32] = {0}; // "AT+NAME[device_name_20_char_max]";   
    sprintf(buffer, "AT+NAME%s", name);
    
    if (0 == usart0_send_line(buffer)) {
-      _delay_ms(USART_DELAY_MS);
       return usart0_receive_ok();
    }      
       

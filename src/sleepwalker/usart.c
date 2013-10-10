@@ -49,10 +49,10 @@ uint8_t usart0_receive_byte(void) {
 }
 
 
-uint8_t usart0_receive_byte_with_timeout(void) { // 1 second timeout.
-   for (int i = 0; i < 20; ++ i) {
+uint8_t usart0_receive_byte_with_timeout(uint16_t timeout_ms) {
+   for (int i = 0; i < timeout_ms / 10; ++ i) {
       if (!(UCSR0A & (1 << RXC0))) {
-         _delay_ms(50);
+         _delay_ms(10);
       }
    }   
    return UDR0;
@@ -68,12 +68,10 @@ uint8_t usart0_baud_rate(uint16_t baud) {
    UBRR0H = (uint8_t)(ubrr_value >> 8); // Set baud rate (high then low bytes).
    UBRR0L = (uint8_t)ubrr_value;
    
-   UCSR0C = (1 << UCSZ01) | (1 << UCSZ00); // Set frame format to 8 data bits, no parity, 1 stop bit.
-   UCSR0B = (1 << RXEN0) | (1 << TXEN0);   // Enable transmission and reception.
+   UCSR0C |= (1 << UCSZ01) | (1 << UCSZ00); // Set frame format to 8 data bits, no parity, 1 stop bit.
+   UCSR0B |= (1 << RXEN0) | (1 << TXEN0);   // Enable transmission and reception.
 
    usart0_send_line("AT"); // Send "AT" wait for "OK".
-   _delay_ms(USART_DELAY_MS);
-
    return usart0_receive_ok();
 }
 
@@ -89,8 +87,8 @@ uint8_t usart0_send_line(const char* str) {
 
 uint8_t usart0_receive_ok(void) {
    char ok[2] = {0};
-   ok[0] = usart0_receive_byte_with_timeout();
-   ok[1] = usart0_receive_byte_with_timeout();
+   ok[0] = usart0_receive_byte();//_with_timeout(300);
+   ok[1] = usart0_receive_byte();//_with_timeout(300);
    
    if ((ok[0] == 'o' || ok[0] == 'O') && (ok[1] == 'k' || ok[1] == 'K'))
       return 0;
