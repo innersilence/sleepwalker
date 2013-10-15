@@ -51,8 +51,9 @@ void hc04_reset_low(void) {
 
 void hc04_reset() {
    hc04_reset_low();
-   _delay_ms(1000);
+   _delay_ms(100);
    hc04_reset_high();
+   _delay_ms(1000); // Wait for BT module to boot.
 }
 
 
@@ -74,7 +75,7 @@ void hc04_init() {
    if (0 != hc04_device_name("baboom.me")) // Set BT module name.
       blink_error("....");
 
-   blink_error("----");
+   //blink_error("----");
 }
 
 
