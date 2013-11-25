@@ -38,89 +38,88 @@ THE SOFTWARE.
 
 char buffer_16_bytes[16];
 
-// http://dronecolony.com/2008/11/13/arduino-and-the-taos-tsl230r-light-sensor-getting-started/
 
+void test_connection();
 
-// IR LED 1.4-1.5V @ 20mA
-// 0.020 = 3.3/x, x = 3.3 / 0.02 = 165 Ohm
-uint32_t led_ir_take_measurement() {
-   uint32_t val = 1;
-   
-   //led_ir_on();
-   sei(); // Enable interrupts.
-   
+uint32_t led_ir_take_measurement() {  
    tsl230_start();
-   while(0 != tsl230_ready()) {}
-   val = tsl230_read();
    
-   cli(); // Disable interrupts.
-   //led_ir_off();
+   while (0 != tsl230_ready()) {
+   }
+   
+   tsl230_stop();
+   uint32_t val = tsl230_read();      
    
    return val;
 }
 
-
-
-// Red LED 2.0-2.4V @ 50mA
-uint32_t led_red_take_measurement() {
-   uint32_t val = 2;
-   
-   //blink();
-   
-   /*led_red_on();
-   sei(); // Enable interrupts.
-   
-   tsl230_start();
-   while(0 != tsl230_ready()) {}
-   val = tsl230_read();
-   
-   cli(); // Disable interrupts.
-   led_red_off();*/
-   
-   return val;
-}
-
-
-void test_connection() {
-   while (1) {
-      usart0_send_line("--ok\r\n");
-      blink();
-      _delay_ms(1000);
-   }   
-}
 
 // To reset BT module set pin 11 (pin 5 on shield to 'low').
-int main(void) { 
-   // Initialize Bluetooth HC-06 module.  
-   hc04_init();      
-   test_connection();
-       
-   // Setup LED pins.
-   //led_ir_pin_output();
-   //led_red_pin_output();
-
-   // Initialize TSL230.
-   //tsl230_init();
-   //tsl230_sensitivity(X1);
-   //tsl230_scaling(DIV_BY_1);
-
-   //// Start taking measurements.
-   //uint32_t micro_watts_per_centimeter_squared;
-   //while(1) {
-      //micro_watts_per_centimeter_squared = led_ir_take_measurement(); // Take measurement of IR LED.
-      //sprintf(buffer_16_bytes, " ir[%04lu]", micro_watts_per_centimeter_squared);
-      //usart0_send_line(buffer_16_bytes);
-         //
-      ////micro_watts_per_centimeter_squared = led_red_take_measurement(); // Take measurement of red LED.
-      ////sprintf(buffer_16_bytes, "red[%04lu]", micro_watts_per_centimeter_squared);
-      ////usart0_send_line(buffer_16_bytes);
-   //}
+int main(void) {      
+   hc04_init(); // Initialize Bluetooth HC-06 module.     
+   tsl230_init(); // Initialize TSL230.
+   
+   tsl230_sensitivity(X1);
+   tsl230_scaling(DIV_BY_1);
+   
+   // Start taking measurements.
+   uint32_t micro_watts_per_centimeter_squared;
+   while(1) {
+      micro_watts_per_centimeter_squared = led_ir_take_measurement(); // Take measurement of IR LED.
+      sprintf(buffer_16_bytes, "ir[%08lu]", micro_watts_per_centimeter_squared);
+      usart0_send_line(buffer_16_bytes);
+      _delay_ms(1000);
+   }
 }
+
+//void test_connection() {
+   //while (1) {
+      //usart0_send_line("-ok");
+      //blink();
+      //_delay_ms(1000);
+   //}
+//}
+
+
+//uint32_t led_red_take_measurement() {
+//led_red_on();
+//
+//tsl230_start();
+//uint32_t while(0 != tsl230_ready()) {}
+//val = tsl230_read();
+//led_red_off();
+//
+//return val;
+//}
+
+
+       
+       // Setup LED pins.
+       //led_ir_pin_output();
+       //led_red_pin_output();
+
+
+      //micro_watts_per_centimeter_squared = led_red_take_measurement(); // Take measurement of red LED.
+      //sprintf(buffer_16_bytes, "red[%04lu]", micro_watts_per_centimeter_squared);
+      //usart0_send_line(buffer_16_bytes);
 
 
 /*
-When programming wait for charging light to go off, or serial won't work.
-When open port with HTerm use \\.\COM4 syntax.
-After reprogramming need to remove device and pair again.
 
+// http://dronecolony.com/2008/11/13/arduino-and-the-taos-tsl230r-light-sensor-getting-started/
+
+// IR LED 1.4-1.5V @ 20mA
+// Red LED 2.0-2.4V @ 50mA
+
+
+. When programming wait for charging light to go off, or serial won't work.
+. When open port with HTerm use \\.\COM4 syntax.
+. After reprogramming need to remove device and pair again.
+. Powering IR LED. Current must be around 20mA, I = V/R -> 3.3V/0.020A =~ 165Ohm. Voltage on led must ve around 1.4-1.5V
+   3.3/1.5 = (165 + x) / x
+   3.3 * x = 1.5 * (165 + x)
+   3.3x = 1.5x + 247.5
+   1.8x = 247.5
+   x = 138Ohm
+   Two resistors 165 & 138 Ohms led connected in between and to the ground, current = 20mA, voltage = 1.5V
 */

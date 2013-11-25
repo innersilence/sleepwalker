@@ -40,7 +40,6 @@ void usart0_send_byte(uint8_t byte) {
    UDR0 = byte; // Transmit data.
 }
 
-
 uint8_t usart0_receive_byte(void) {
    while (!(UCSR0A & (1 << RXC0))) {
       // Wait for byte to be received.
@@ -48,16 +47,14 @@ uint8_t usart0_receive_byte(void) {
    return UDR0;
 }
 
-
-uint8_t usart0_receive_byte_with_timeout(uint16_t timeout_ms) {
+/*uint8_t usart0_receive_byte_with_timeout(uint16_t timeout_ms) {
    for (int i = 0; i < timeout_ms / 10; ++ i) {
       if (!(UCSR0A & (1 << RXC0))) {
          _delay_ms(10);
       }
    }   
    return UDR0;
-}
-
+}*/
 
 // UBRR calculator http://www.wormfood.net/avrbaudcalc.php
 uint8_t usart0_baud_rate(uint16_t baud) {
@@ -75,7 +72,6 @@ uint8_t usart0_baud_rate(uint16_t baud) {
    return usart0_receive_ok();
 }
 
-
 uint8_t usart0_send_line(const char* str) {
    int len = strlen(str);
    for (int i = 0; i < len; ++ i) {
@@ -83,7 +79,6 @@ uint8_t usart0_send_line(const char* str) {
    }
    return 0;
 }
-
 
 uint8_t usart0_receive_ok(void) {
    char ok[2] = {0};

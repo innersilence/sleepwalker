@@ -33,6 +33,6 @@ uint8_t usart0_baud_rate(uint16_t baud);
 uint8_t usart0_send_line(const char* str);
 uint8_t usart0_receive_ok(void);
 
-uint8_t usart0_receive_byte_with_timeout(uint16_t timeout_ms);
+//uint8_t usart0_receive_byte_with_timeout(uint16_t timeout_ms);
 
 #endif /* USART_H_ */

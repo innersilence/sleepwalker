@@ -44,13 +44,15 @@ typedef enum {
 typedef enum {
    EDGE_RISING,
    EDGE_FALLING,
-   EDGE_DONE
+   EDGE_DONE,
+   EDGE_STOP
 } lsl230_interrupt_edge_e;
 
 void tsl230_init(void); 
 void tsl230_sensitivity(tsl230_sensitivity_e sensitivity);
 void tsl230_scaling(tsl230_scaling_e scaling);
 void tsl230_start(void);
+void tsl230_stop(void);
 short tsl230_ready(void);
 uint32_t tsl230_read(void);
 
