@@ -63,12 +63,13 @@ int main(void) {
    tsl230_scaling(DIV_BY_1);
    
    // Start taking measurements.
-   uint32_t micro_watts_per_centimeter_squared;
    while(1) {
-      micro_watts_per_centimeter_squared = led_ir_take_measurement(); // Take measurement of IR LED.
-      sprintf(buffer_16_bytes, "ir[%08lu]", micro_watts_per_centimeter_squared);
+      uint32_t micro_watts_per_centimeter_squared = led_ir_take_measurement() / 4; // Take measurement of IR LED.
+      if (micro_watts_per_centimeter_squared > 1000)
+         micro_watts_per_centimeter_squared = 1000;
+      sprintf(buffer_16_bytes, "1 %"PRIu32"\n", micro_watts_per_centimeter_squared);
+      //sprintf(buffer_16_bytes, "1 %08lu\n", micro_watts_per_centimeter_squared);
       usart0_send_line(buffer_16_bytes);
-      _delay_ms(1000);
    }
 }
 
