@@ -26,6 +26,7 @@ namespace Sleepwalker
         {
             InitializeComponent();
             InitializeComPortList();
+            InitializeGraphlib();
         }
 
         private void InitializeComPortList()
@@ -45,7 +46,7 @@ namespace Sleepwalker
             collector = new SerialCollector(port);       
             collector.EmitDataPoint += parser.DataPointReceived;
 
-            heartRateLabel.Text = "00";
+            heartRateLabel.Text = "00";  
         }
 
         private void collectorStartStopButton_Click(object sender, EventArgs e)
@@ -54,8 +55,7 @@ namespace Sleepwalker
             if (collector == null || collector.Stopped)
             {
                 InitializeHrva();
-                InitializeGraphlib();
-
+              
                 //TestPeakDetector();
 
                 collector.Start();
@@ -73,7 +73,10 @@ namespace Sleepwalker
             SoChanPeakDetector pd = new SoChanPeakDetector(8, 16, 50);
 
             DataPoint[] gozinta = LoadDataPointsFromFile(".\\data_papa.csv");
-            DataPoint[] gozoutta = pd.GetPeaks(gozinta);
+            if (gozinta != null)
+            {
+                DataPoint[] gozoutta = pd.GetPeaks(gozinta);
+            }
         }
 
         private DataPoint[] LoadDataPointsFromFile(string filename)
@@ -84,25 +87,23 @@ namespace Sleepwalker
             List<DataPoint> points = new List<DataPoint>();
             using (StreamReader r = new StreamReader(filename, Encoding.ASCII))
             {
-                string data = r.ReadLine();
-                string[] tokens = data.Split(new char[] { ' ', '\n' });
-                if (tokens.Length >= 2)
+                string data = null;
+                do
                 {
-                    int channel = int.Parse(tokens[0]);
-                    int value = int.Parse(tokens[1]);
-                    points.Add(new IRDataPoint(value));
-                }
+                    data = r.ReadLine();
+                    if (data != null)
+                    {
+                        string[] tokens = data.Split(new char[] { ' ', '\n' });
+                        if (tokens.Length >= 1)
+                        {
+                            int value = int.Parse(tokens[0]);
+                            points.Add(new IRDataPoint(value));
+                        }
+                    }
+                } while (data != null);
             }
 
             return points.ToArray();
         }
     }
-
-    /*
-     [todo]
-     
-     * Two graps (all data + R only)
-     * Pulse, RR interval
-     
-     */
 }

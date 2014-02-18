@@ -99,7 +99,7 @@ namespace Sleepwalker.HRVA.Realtime
             // Now we convert the ArrayList to an array and return it
             for (int i = 0; i < rTime.Count; i++)
             {
-                results[i].Value = rTime[i];
+                results[i] = new IRDataPoint(rTime[i]);
             }
 
             return results;
