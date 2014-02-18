@@ -64,9 +64,8 @@ int main(void) {
    
    // Start taking measurements.
    while(1) {
-      uint32_t micro_watts_per_centimeter_squared = led_ir_take_measurement() / 4; // Take measurement of IR LED.
-      if (micro_watts_per_centimeter_squared > 1000)
-         micro_watts_per_centimeter_squared = 1000;
+      uint32_t micro_watts_per_centimeter_squared = led_ir_take_measurement(); // Take measurement of IR LED.
+      //if (micro_watts_per_centimeter_squared > 1000) micro_watts_per_centimeter_squared = 1000;
       sprintf(buffer_16_bytes, "1 %"PRIu32"\n", micro_watts_per_centimeter_squared);
       //sprintf(buffer_16_bytes, "1 %08lu\n", micro_watts_per_centimeter_squared);
       usart0_send_line(buffer_16_bytes);
@@ -107,15 +106,24 @@ int main(void) {
 
 /*
 
-// http://dronecolony.com/2008/11/13/arduino-and-the-taos-tsl230r-light-sensor-getting-started/
-
-// IR LED 1.4-1.5V @ 20mA
-// Red LED 2.0-2.4V @ 50mA
-
+. http://dronecolony.com/2008/11/13/arduino-and-the-taos-tsl230r-light-sensor-getting-started/
 
 . When programming wait for charging light to go off, or serial won't work.
 . When open port with HTerm use \\.\COM4 syntax.
 . After reprogramming need to remove device and pair again.
+
+IR LED 
+   1.4-1.5V @ 20mA  
+     754-1433-1-ND 940nm 1.2V @ 50mA case: 0603 
+     296-11044-1-ND      1.2V @ 50mA case: SOT23
+
+
+Red LED 2.0-2.4V @ 50mA
+   754-1122-1-ND                   660nm 1.85V @ 20mA case: 0603
+   LT3008ETS8-1.8#TRMPBFCT-ND             1.8V @ 20mA case: SOT23 (NON-STOCK)
+   LT3008ETS8-2.5#TRMPBFCT-ND             2.5V @ 20mA case: SOT23
+
+
 . Powering IR LED. Current must be around 20mA, I = V/R -> 3.3V/0.020A =~ 165Ohm. Voltage on led must ve around 1.4-1.5V
    3.3/1.5 = (165 + x) / x
    3.3 * x = 1.5 * (165 + x)

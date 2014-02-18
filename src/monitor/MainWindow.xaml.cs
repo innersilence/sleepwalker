@@ -37,52 +37,76 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Microsoft.Research.DynamicDataDisplay;
+using Microsoft.Research.DynamicDataDisplay.DataSources;
+using Microsoft.Research.DynamicDataDisplay.PointMarkers;
+using System.Globalization;
 
 
 namespace DataMonitor
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// http://research.microsoft.com/en-us/um/cambridge/projects/ddd/d3isdk/
-    /// http://dynamicdatadisplay.codeplex.com/discussions/443837
-    /// http://msdn.microsoft.com/en-us/magazine/ff714591.aspx
-    /// http://stackoverflow.com/questions/7090345/dynamic-line-chart-in-c-sharp-wpf-application
-    /// http://dynamicdatadisplay.codeplex.com/discussions/224503
-    /// Animation: http://stackoverflow.com/questions/13142173/dynamicdatadisplay-chartplotter-remove-all-plots
-    /// Animation: http://dynamicdatadisplay.codeplex.com/discussions/73597
-    /// http://dynamicdatadisplay.codeplex.com/discussions/227992
-    /// </summary>
     public partial class MainWindow : Window
     {
-        //private DispatcherTimer plotTimer = new System.Windows.Threading.DispatcherTimer();
-
-        private MonitorDataModel Model { get; set; }
+        double phase = 0;
+        readonly double[] animatedX = new double[1000];
+        readonly double[] animatedY = new double[1000];
+        //FixedSizedQueue<double> anuimatedX = new FixedSizedQueue<double>();
+        //FixedSizedQueue<double> anuimatedX = new FixedSizedQueue<double>();
+       
+        readonly DispatcherTimer timer = new DispatcherTimer();
+        Header chartHeader = new Header();
+        TextBlock headerContents = new TextBlock();
+        EnumerableDataSource<double> animatedDataSource = null;
 
         public MainWindow()
         {
             InitializeComponent();
-
-            Loaded += new RoutedEventHandler(MainWindow_Loaded);
-            Closed += new EventHandler(MainWindow_Closed);
+            headerContents.FontSize = 24;
+            headerContents.Text = "Heart Rate = 0.00";
+            headerContents.HorizontalAlignment = HorizontalAlignment.Center;
+            chartHeader.Content = headerContents;
+            plotter.Children.Add(chartHeader);
+            // RenderOptions.SetEdgeMode(plotter, EdgeMode.Aliased); // http://dynamicdatadisplay.codeplex.com/discussions/74901
         }
 
-        private void MainWindow_Loaded(object sender, RoutedEventArgs args)
+        private void AnimatedPlot_Timer(object sender, EventArgs e)
         {
-            Model = new MonitorDataModel();
+            phase += 0.1;
 
-            for (int i = 0; i < 10; i++)
+            if (phase > 2 * Math.PI)
             {
-                Model.Values.Add(new MonitorData((double)i, TimeSpan.FromSeconds(i)));
-                Model.Values.Add(new MonitorData((double)i, TimeSpan.FromSeconds(i + 1)));
+                phase -= 2 * Math.PI;
             }
 
-            DataContext = Model;
-            //Model.Start();
+            for (int i = 0; i < animatedX.Length; i++)
+            {
+                animatedY[i] = Math.Sin(animatedX[i] + phase);
+            }
+
+            animatedDataSource.RaiseDataChanged();
+            headerContents.Text = String.Format(CultureInfo.InvariantCulture, "Heart Rate = {0:N2}", phase);
         }
 
-        private void MainWindow_Closed(object sender, EventArgs args)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //Model.Stop();
+            for (int i = 0; i < animatedX.Length; i++)
+            {
+                animatedX[i] = 2 * Math.PI * i / animatedX.Length;
+                animatedY[i] = Math.Sin(animatedX[i]);
+            }
+
+            EnumerableDataSource<double> xSrc = new EnumerableDataSource<double>(animatedX);
+            xSrc.SetXMapping(x => x);
+            animatedDataSource = new EnumerableDataSource<double>(animatedY);
+            animatedDataSource.SetYMapping(y => y);
+
+            plotter.AddLineGraph(new CompositeDataSource(xSrc, animatedDataSource), new Pen(Brushes.Magenta, 3), new PenDescription("Heart Rate"));
+
+            timer.Interval = TimeSpan.FromMilliseconds(50);
+            timer.Tick += AnimatedPlot_Timer;
+            timer.IsEnabled = true;
+
+            plotter.FitToView();
         }
     }
 }

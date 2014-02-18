@@ -52,9 +52,9 @@ namespace DataMonitor
     public class MonitorDataModel //: INotifyPropertyChanged
     {
         private CompositeDataSource timeData;
-        //private SerialPort comPort = null;
-       // private DateTime monitorStarted;
-        //private Thread serialPortSimulatorThread = null;
+        private SerialPort comPort = null;
+        private DateTime monitorStarted;
+        private Thread serialPortSimulatorThread = null;
         //public event PropertyChangedEventHandler PropertyChanged;
 
         public MonitorDataModel()
@@ -77,7 +77,7 @@ namespace DataMonitor
             {
                 if (timeData == null)
                 {
-                    var xData = new EnumerableDataSource<double>(Values.Select(v => v.Elapsed.TotalSeconds));
+                    var xData = new EnumerableDataSource<double>(Values.Select(v => v.Elapsed.TotalMilliseconds));
                     xData.SetXMapping(x => x);
                     var yData = new EnumerableDataSource<double>(Values.Select(v => v.Value));
                     yData.SetYMapping(y => y);
@@ -100,58 +100,58 @@ namespace DataMonitor
         //}
         //#endregion
 
-        //#region Serial
-        //public void Start()
-        //{
-        //    port = new SerialPort(Port, Baud, Parity.None, 8, StopBits.One);
-        //    port.DataReceived += new SerialDataReceivedEventHandler(SerialPortReceiveHandler);
-        //    try
-        //    {
-        //        port.Open();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        MessageBox.Show(e.Message);
-        //    }
+        #region Serial
+        public void Start()
+        {
+            comPort = new SerialPort(Port, Baud, Parity.None, 8, StopBits.One);
+            comPort.DataReceived += new SerialDataReceivedEventHandler(SerialPortReceiveHandler);
+            try
+            {
+                comPort.Open();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
 
-        //    monitorStarted = DateTime.Now;
-        //}
+            monitorStarted = DateTime.Now;
+        }
 
-        //public void Stop()
-        //{
-        //    if (comPort != null)
-        //        comPort.Close();
-        //}
-        //public void StartSimulation()
-        //{
-        //    monitorStarted = DateTime.Now;
-        //    serialPortSimulatorThread = new Thread(SerialPortSimulator);
-        //    serialPortSimulatorThread.Start();
-        //}
+        public void Stop()
+        {
+            if (comPort != null)
+                comPort.Close();
+        }
+        public void StartSimulation()
+        {
+            monitorStarted = DateTime.Now;
+            serialPortSimulatorThread = new Thread(SerialPortSimulator);
+            serialPortSimulatorThread.Start();
+        }
 
-        //private void SerialPortReceiveHandler(object sender, SerialDataReceivedEventArgs e)
-        //{
-        //    SerialPort port = (SerialPort)sender;
-        //    string indata = port.ReadLine();
+        private void SerialPortReceiveHandler(object sender, SerialDataReceivedEventArgs e)
+        {
+            SerialPort port = (SerialPort)sender;
+            string indata = port.ReadLine();
 
-        //    string[] readings = indata.Split(' ');
-        //    int ir = int.Parse(readings[0]);
-        //    int red = int.Parse(readings[1]);
+            string[] readings = indata.Split(' ');
+            int ir = int.Parse(readings[0]);
+            int red = int.Parse(readings[1]);
 
-        //    Values.Add(new MonitorData((double)red, DateTime.Now - monitorStarted));
-        //}
+            Values.Add(new MonitorData((double)red, DateTime.Now - monitorStarted));
+        }
 
-        //private void SerialPortSimulator()
-        //{
-        //    const double amplitude = 1000.0;
-        //    while (true)
-        //    {
-        //        double sample = amplitude * Math.Sin(1000);
-        //        Values.Add(new MonitorData(sample, DateTime.Now - monitorStarted));
-        //        Thread.Sleep(100);
-        //        //OnPropertyChanged("MonitorData");
-        //    }
-        //}
-        //#endregion
+        private void SerialPortSimulator()
+        {
+            const double amplitude = 1000.0;
+            while (true)
+            {
+                double sample = amplitude * Math.Sin(1000);
+                Values.Add(new MonitorData(sample, DateTime.Now - monitorStarted));
+                Thread.Sleep(100);
+                //OnPropertyChanged("MonitorData");
+            }
+        }
+        #endregion
     }
 }
