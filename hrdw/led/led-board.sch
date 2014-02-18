@@ -1669,40 +1669,6 @@ Ingenieurbüro ing-rb, mail@ing-rb.de&lt;/p&gt;</description>
 </deviceset>
 </devicesets>
 </library>
-<library name="supply1">
-<description>&lt;b&gt;Supply Symbols&lt;/b&gt;&lt;p&gt;
- GND, VCC, 0V, +5V, -5V, etc.&lt;p&gt;
- Please keep in mind, that these devices are necessary for the
- automatic wiring of the supply signals.&lt;p&gt;
- The pin name defined in the symbol is identical to the net which is to be wired automatically.&lt;p&gt;
- In this library the device names are the same as the pin names of the symbols, therefore the correct signal names appear next to the supply symbols in the schematic.&lt;p&gt;
- &lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
-<packages>
-</packages>
-<symbols>
-<symbol name="+3V3">
-<wire x1="1.27" y1="-1.905" x2="0" y2="0" width="0.254" layer="94"/>
-<wire x1="0" y1="0" x2="-1.27" y2="-1.905" width="0.254" layer="94"/>
-<text x="-2.54" y="-5.08" size="1.778" layer="96" rot="R90">&gt;VALUE</text>
-<pin name="+3V3" x="0" y="-2.54" visible="off" length="short" direction="sup" rot="R90"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="+3V3" prefix="+3V3">
-<description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;</description>
-<gates>
-<gate name="G$1" symbol="+3V3" x="0" y="0"/>
-</gates>
-<devices>
-<device name="">
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="jumper">
 <description>&lt;b&gt;Jumpers&lt;/b&gt;&lt;p&gt;
 &lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
@@ -1808,7 +1774,6 @@ Ingenieurbüro ing-rb, mail@ing-rb.de&lt;/p&gt;</description>
 <parts>
 <part name="LED2" library="led" deviceset="LED" device="CHIPLED-0603-TTW"/>
 <part name="U1" library="_MAX4230_MAX4231_MAX4232_MAX4234" deviceset="MAX4232*" device="AKA+"/>
-<part name="+3V1" library="supply1" deviceset="+3V3" device=""/>
 <part name="JP1" library="jumper" deviceset="JP4E" device=""/>
 </parts>
 <sheets>
@@ -1819,7 +1784,6 @@ Ingenieurbüro ing-rb, mail@ing-rb.de&lt;/p&gt;</description>
 <instance part="LED2" gate="G$1" x="73.66" y="48.26"/>
 <instance part="U1" gate="A" x="38.1" y="66.04"/>
 <instance part="U1" gate="B" x="38.1" y="53.34"/>
-<instance part="+3V1" gate="G$1" x="0" y="86.36"/>
 <instance part="JP1" gate="G$1" x="-7.62" y="71.12" rot="R90"/>
 </instances>
 <busses>
@@ -1833,18 +1797,6 @@ Ingenieurbüro ing-rb, mail@ing-rb.de&lt;/p&gt;</description>
 <wire x1="45.72" y1="40.64" x2="45.72" y2="53.34" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="+3V3" class="0">
-<segment>
-<pinref part="+3V1" gate="G$1" pin="+3V3"/>
-<wire x1="0" y1="83.82" x2="0" y2="78.74" width="0.1524" layer="91"/>
-<wire x1="0" y1="78.74" x2="12.7" y2="78.74" width="0.1524" layer="91"/>
-<wire x1="12.7" y1="78.74" x2="12.7" y2="76.2" width="0.1524" layer="91"/>
-<wire x1="12.7" y1="76.2" x2="12.7" y2="55.88" width="0.1524" layer="91"/>
-<wire x1="12.7" y1="55.88" x2="30.48" y2="55.88" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="G$1" pin="4"/>
-<wire x1="-5.08" y1="76.2" x2="12.7" y2="76.2" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="N$4" class="0">
 <segment>
 <wire x1="73.66" y1="53.34" x2="73.66" y2="48.26" width="0.1524" layer="91"/>
@@ -1852,39 +1804,36 @@ Ingenieurbüro ing-rb, mail@ing-rb.de&lt;/p&gt;</description>
 <wire x1="48.26" y1="53.34" x2="73.66" y2="53.34" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$5" class="0">
-<segment>
-<pinref part="JP1" gate="G$1" pin="2"/>
-<wire x1="-5.08" y1="71.12" x2="2.54" y2="71.12" width="0.1524" layer="91"/>
-<wire x1="2.54" y1="71.12" x2="2.54" y2="73.66" width="0.1524" layer="91"/>
-<wire x1="2.54" y1="73.66" x2="48.26" y2="73.66" width="0.1524" layer="91"/>
-<pinref part="U1" gate="A" pin="OUT"/>
-<wire x1="48.26" y1="73.66" x2="48.26" y2="66.04" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$11" class="0">
-<segment>
-<pinref part="U1" gate="A" pin="+IN"/>
-<wire x1="27.94" y1="68.58" x2="2.54" y2="68.58" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="N$2" class="0">
 <segment>
-<pinref part="LED2" gate="G$1" pin="C"/>
-<wire x1="73.66" y1="43.18" x2="73.66" y2="35.56" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$3" class="0">
-<segment>
-<pinref part="U1" gate="A" pin="-IN"/>
-<wire x1="27.94" y1="63.5" x2="7.62" y2="63.5" width="0.1524" layer="91"/>
+<wire x1="2.54" y1="76.2" x2="48.26" y2="76.2" width="0.1524" layer="91"/>
+<pinref part="U1" gate="A" pin="OUT"/>
+<wire x1="48.26" y1="76.2" x2="48.26" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="2.54" y1="76.2" x2="2.54" y2="68.58" width="0.1524" layer="91"/>
+<pinref part="JP1" gate="G$1" pin="1"/>
+<wire x1="2.54" y1="68.58" x2="-5.08" y2="68.58" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$8" class="0">
 <segment>
-<pinref part="JP1" gate="G$1" pin="1"/>
-<wire x1="-5.08" y1="68.58" x2="-2.54" y2="68.58" width="0.1524" layer="91"/>
-<wire x1="-2.54" y1="68.58" x2="-2.54" y2="55.88" width="0.1524" layer="91"/>
+<pinref part="U1" gate="A" pin="+IN"/>
+<wire x1="27.94" y1="68.58" x2="10.16" y2="68.58" width="0.1524" layer="91"/>
+<pinref part="U1" gate="A" pin="-IN"/>
+<wire x1="27.94" y1="63.5" x2="10.16" y2="63.5" width="0.1524" layer="91"/>
+<wire x1="10.16" y1="68.58" x2="10.16" y2="63.5" width="0.1524" layer="91"/>
+<wire x1="10.16" y1="63.5" x2="10.16" y2="35.56" width="0.1524" layer="91"/>
+<pinref part="LED2" gate="G$1" pin="C"/>
+<wire x1="73.66" y1="43.18" x2="73.66" y2="35.56" width="0.1524" layer="91"/>
+<wire x1="10.16" y1="35.56" x2="73.66" y2="35.56" width="0.1524" layer="91"/>
+<wire x1="10.16" y1="68.58" x2="10.16" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="10.16" y1="71.12" x2="-7.62" y2="71.12" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$6" class="0">
+<segment>
+<wire x1="-12.7" y1="55.88" x2="30.48" y2="55.88" width="0.1524" layer="91"/>
+<wire x1="-12.7" y1="55.88" x2="-12.7" y2="73.66" width="0.1524" layer="91"/>
+<wire x1="-12.7" y1="73.66" x2="-7.62" y2="73.66" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
