@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{302D9B84-9550-424A-BB47-C6B567519FFF}"
+	ProjectSection(SolutionItems) = preProject
+		monitor\license.txt = monitor\license.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sleepwalker", "monitor\Sleepwalker\Sleepwalker.csproj", "{96F94D4A-857A-41D9-A43E-E340E7F79B1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sleepwalker.Collector", "monitor\Sleepwalker.Collector\Sleepwalker.Collector.csproj", "{ACE3BC12-508C-4F64-9CBD-9C689967EB2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sleepwalker.HRVA.Realtime", "monitor\Sleepwalker.HRVA.QRSParser\Sleepwalker.HRVA.Realtime.csproj", "{C33D34F9-D762-4CC3-810A-466AD714ECE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stephan.Zimmermann.GraphLib", "monitor\Stephan.Zimmermann.GraphLib\Stephan.Zimmermann.GraphLib.csproj", "{0C0A1F4D-1363-4544-A7C5-196C76D26CCA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{96F94D4A-857A-41D9-A43E-E340E7F79B1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96F94D4A-857A-41D9-A43E-E340E7F79B1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96F94D4A-857A-41D9-A43E-E340E7F79B1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96F94D4A-857A-41D9-A43E-E340E7F79B1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACE3BC12-508C-4F64-9CBD-9C689967EB2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACE3BC12-508C-4F64-9CBD-9C689967EB2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACE3BC12-508C-4F64-9CBD-9C689967EB2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACE3BC12-508C-4F64-9CBD-9C689967EB2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C33D34F9-D762-4CC3-810A-466AD714ECE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C33D34F9-D762-4CC3-810A-466AD714ECE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C33D34F9-D762-4CC3-810A-466AD714ECE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C33D34F9-D762-4CC3-810A-466AD714ECE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C0A1F4D-1363-4544-A7C5-196C76D26CCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C0A1F4D-1363-4544-A7C5-196C76D26CCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C0A1F4D-1363-4544-A7C5-196C76D26CCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C0A1F4D-1363-4544-A7C5-196C76D26CCA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
