@@ -34,12 +34,13 @@
             this.heartRateLabel = new System.Windows.Forms.Label();
             this.display = new GraphLib.PlotterDisplayEx();
             this.graphPanel = new System.Windows.Forms.Panel();
+            this.remLabel = new System.Windows.Forms.Label();
             this.graphPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // collectorStartStopButton
             // 
-            this.collectorStartStopButton.Location = new System.Drawing.Point(194, 23);
+            this.collectorStartStopButton.Location = new System.Drawing.Point(415, 23);
             this.collectorStartStopButton.Name = "collectorStartStopButton";
             this.collectorStartStopButton.Size = new System.Drawing.Size(75, 23);
             this.collectorStartStopButton.TabIndex = 0;
@@ -50,7 +51,7 @@
             // serialPortsComboBox
             // 
             this.serialPortsComboBox.FormattingEnabled = true;
-            this.serialPortsComboBox.Location = new System.Drawing.Point(58, 25);
+            this.serialPortsComboBox.Location = new System.Drawing.Point(279, 25);
             this.serialPortsComboBox.Name = "serialPortsComboBox";
             this.serialPortsComboBox.Size = new System.Drawing.Size(121, 21);
             this.serialPortsComboBox.TabIndex = 1;
@@ -61,9 +62,9 @@
             this.heartRateLabel.Font = new System.Drawing.Font("Courier New", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.heartRateLabel.Location = new System.Drawing.Point(12, 9);
             this.heartRateLabel.Name = "heartRateLabel";
-            this.heartRateLabel.Size = new System.Drawing.Size(40, 41);
+            this.heartRateLabel.Size = new System.Drawing.Size(84, 41);
             this.heartRateLabel.TabIndex = 2;
-            this.heartRateLabel.Text = ".";
+            this.heartRateLabel.Text = "000";
             // 
             // display
             // 
@@ -93,11 +94,23 @@
             this.graphPanel.Size = new System.Drawing.Size(498, 317);
             this.graphPanel.TabIndex = 5;
             // 
+            // remLabel
+            // 
+            this.remLabel.AutoSize = true;
+            this.remLabel.Font = new System.Drawing.Font("Courier New", 27.75F, System.Drawing.FontStyle.Bold);
+            this.remLabel.Location = new System.Drawing.Point(117, 9);
+            this.remLabel.Name = "remLabel";
+            this.remLabel.Size = new System.Drawing.Size(106, 41);
+            this.remLabel.TabIndex = 6;
+            this.remLabel.Tag = "s";
+            this.remLabel.Text = "NREM";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(502, 408);
+            this.Controls.Add(this.remLabel);
             this.Controls.Add(this.graphPanel);
             this.Controls.Add(this.heartRateLabel);
             this.Controls.Add(this.serialPortsComboBox);
@@ -117,6 +130,7 @@
         private System.Windows.Forms.Label heartRateLabel;
         private GraphLib.PlotterDisplayEx display;
         private System.Windows.Forms.Panel graphPanel;
+        private System.Windows.Forms.Label remLabel;
     }
 }
 

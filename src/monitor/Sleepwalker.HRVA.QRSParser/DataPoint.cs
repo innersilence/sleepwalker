@@ -11,6 +11,12 @@ namespace Sleepwalker.HRVA.Realtime
         public int Value { get; set; }
         public DateTime Timestamp { get; set; }
 
+        public DataPoint(int val)
+        {
+            Value = val;
+            Timestamp = DateTime.Now.ToUniversalTime();
+        }
+
         public override string ToString()
         {
             return string.Format("{0}@{1}", Value, Timestamp);

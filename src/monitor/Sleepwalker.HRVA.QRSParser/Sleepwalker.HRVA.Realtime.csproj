@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BenderVorobjaninovRealtimePeakDetector.cs" />
     <Compile Include="CommandDataPoint.cs" />
     <Compile Include="DataPoint.cs" />
     <Compile Include="HRVAnalyzer.cs" />
@@ -47,8 +48,6 @@
     <Compile Include="RParser.cs" />
     <Compile Include="RedDataPoint.cs" />
     <Compile Include="RDataPoint.cs" />
-    <Compile Include="SoAndChan.cs" />
-    <Compile Include="SoChanPeakDetector.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -8,10 +8,8 @@ namespace Sleepwalker.HRVA.Realtime
 {
     public class CommandDataPoint : DataPoint
     {
-        public CommandDataPoint(int val)
+        public CommandDataPoint(int val) : base(val)
         {
-            Value = val;
-            Timestamp = DateTime.Now.ToUniversalTime();
         }
     }
 }

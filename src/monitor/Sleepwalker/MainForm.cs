@@ -70,40 +70,29 @@ namespace Sleepwalker
 
         private void TestPeakDetector()
         {
-            SoChanPeakDetector pd = new SoChanPeakDetector(8, 16, 50);
-
-            DataPoint[] gozinta = LoadDataPointsFromFile(".\\data_papa.csv");
-            if (gozinta != null)
-            {
-                DataPoint[] gozoutta = pd.GetPeaks(gozinta);
-            }
-        }
-
-        private DataPoint[] LoadDataPointsFromFile(string filename)
-        {
-            if (!File.Exists(filename))
-                return null;
-
+            List<string> lines = System.IO.File.ReadAllLines(@".\data_papa_400.csv").ToList();
             List<DataPoint> points = new List<DataPoint>();
-            using (StreamReader r = new StreamReader(filename, Encoding.ASCII))
+            List<int> peakIndices = new List<int>();
+
+            for (int i = 0; i < lines.Count; ++i)
             {
-                string data = null;
-                do
-                {
-                    data = r.ReadLine();
-                    if (data != null)
-                    {
-                        string[] tokens = data.Split(new char[] { ' ', '\n' });
-                        if (tokens.Length >= 1)
-                        {
-                            int value = int.Parse(tokens[0]);
-                            points.Add(new IRDataPoint(value));
-                        }
-                    }
-                } while (data != null);
+                string[] tokens = lines[i].Split(new char[] { ' ', '\n' });
+                points.Add(new DataPoint(int.Parse(tokens[0])));
+                if (tokens.Length > 1)
+                    peakIndices.Add(i);
             }
 
-            return points.ToArray();
+            List<Tuple<int, int>> peaksRealtime = new List<Tuple<int, int>>();
+            var peakDetector = new BenderVorobjaninovRealtimePeakDetector(4000, 5);
+
+            for (int i = 0; i < points.Count; ++i)
+            {
+                DataPoint peak = peakDetector.GetPeak(points[i]);
+                if (Constants.PeakDetector.NotAPeak != peak.Value)
+                {
+                    peaksRealtime.Add(new Tuple<int, int>(peak.Value, i - 1));
+                }
+            }
         }
     }
 }
