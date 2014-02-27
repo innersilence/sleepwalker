@@ -53,23 +53,31 @@ namespace Sleepwalker.Collector
         private void OnIncomingData(object sender, SerialDataReceivedEventArgs e)
         {
             SerialPort sp = (SerialPort)sender;
-            string data = sp.ReadLine();
-
-            DataPoint p = Parse(data);
-            if (p != null)
+            string data;
+            try
             {
-                if (p.GetType() == typeof(IRDataPoint))
+                data = sp.ReadLine();
+                DataPoint p = Parse(data);
+                if (p != null)
                 {
-                    irDataPointQueue.Enqueue(p as IRDataPoint);
-                    EmitDataPoint(this, p);
+                    if (p.GetType() == typeof(IRDataPoint))
+                    {
+                        irDataPointQueue.Enqueue(p as IRDataPoint);
+                        EmitDataPoint(this, p);
+                    }
                 }
+            
             }
+            catch (Exception) { }
         }
 
         private DataPoint Parse(string data)
         {
             string[] tokens = data.Split(new char[] { ' ', '\n' });
             if (tokens.Length < 2)
+                return null;
+
+            if (string.IsNullOrEmpty(tokens[0]) || string.IsNullOrEmpty(tokens[1]))
                 return null;
 
             int channel = int.Parse(tokens[0]);

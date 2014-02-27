@@ -98,7 +98,7 @@
             // 
             this.remLabel.AutoSize = true;
             this.remLabel.Font = new System.Drawing.Font("Courier New", 27.75F, System.Drawing.FontStyle.Bold);
-            this.remLabel.Location = new System.Drawing.Point(117, 9);
+            this.remLabel.Location = new System.Drawing.Point(167, 13);
             this.remLabel.Name = "remLabel";
             this.remLabel.Size = new System.Drawing.Size(106, 41);
             this.remLabel.TabIndex = 6;
