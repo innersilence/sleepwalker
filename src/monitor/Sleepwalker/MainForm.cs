@@ -26,7 +26,8 @@ namespace Sleepwalker
         {
             InitializeComponent();
             InitializeComPortList();
-            InitializeGraphlib(new EventHandler(SetFrameData));           
+            InitializeGraphlib(new EventHandler(SetFrameData));
+            InitializeHrva();
         }
 
         private void InitializeComPortList()
@@ -44,9 +45,7 @@ namespace Sleepwalker
 
             string port = serialPortsComboBox.Items[serialPortsComboBox.SelectedIndex].ToString();
             collector = new SerialCollector(port);       
-            collector.EmitDataPoint += parser.DataPointReceived;
-
-            heartRateLabel.Text = "00";  
+            collector.EmitDataPoint += parser.DataPointReceived; 
         }
 
         private void SetFrameData(object sender, EventArgs e)
@@ -55,13 +54,13 @@ namespace Sleepwalker
             try
             {
                 GraphLib.cPoint[] displayPoints = display.DataSources[0].Samples;
-                for (int i = 0; i < collectedPoints.Length; ++ i)
+                for (int i = 0; i < collectedPoints.Length; ++i)
                 {
                     displayPoints[i].x = i;
                     displayPoints[i].y = (float)collectedPoints[i].Value;
                 }
-                
-                this.Invoke(new MethodInvoker(RefreshGraph));
+
+                //this.Invoke(new MethodInvoker(RefreshGraph));
             }
             catch (ObjectDisposedException) { } // we get this on closing of form            
             catch (Exception) { }
@@ -70,48 +69,28 @@ namespace Sleepwalker
         private void collectorStartStopButton_Click(object sender, EventArgs e)
         {
             Button b = (Button)sender;
+            b.Enabled = false;
             if (collector == null || collector.Stopped)
             {
-                InitializeHrva();
-             
-                collector.Start();
-                display.Start();
-                StartGraph();
-                
-                b.Text = "Stop";
+                if (collector.Start())
+                {
+                    display.Start();
+                    StartGraph();
+
+                    b.Text = "Stop";
+                }
             }
             else
             {
-                collector.Stop();
-                StopGraph();
-                display.Stop();
+                if (collector.Stop())
+                {
+                    StopGraph();
+                    display.Stop();
 
-                b.Text = "Start";
+                    b.Text = "Start";
+                }
             }
+            b.Enabled = true;
         }
-
-        //private void TestPeakDetector()
-        //{
-        //    List<string> lines = System.IO.File.ReadAllLines(@".\data_papa_400.csv").ToList();
-        //    List<DataPoint> points = new List<DataPoint>();
-
-        //    lines.ForEach(l => 
-        //    { 
-        //        points.Add(new DataPoint(int.Parse(l.Trim('\n')))); 
-        //    });
-
-
-        //    var peakDetector = new BenderVorobjaninovRealtimePeakDetector(4000, 5) as IPeakDetector;
-
-        //    List<int> peaksRealtime = new List<int>();
-        //    points.ForEach(p =>
-        //    {
-        //        DataPoint peak = peakDetector.GetPeak(p);
-        //        if (PeakDetector.Constants.NotAPeak != peak.Value)
-        //        {
-        //            peaksRealtime.Add(peak.Value);
-        //        }
-        //    });
-        //}
     }
 }

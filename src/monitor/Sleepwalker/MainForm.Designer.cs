@@ -32,15 +32,15 @@
             this.collectorStartStopButton = new System.Windows.Forms.Button();
             this.serialPortsComboBox = new System.Windows.Forms.ComboBox();
             this.heartRateLabel = new System.Windows.Forms.Label();
-            this.display = new GraphLib.PlotterDisplayEx();
             this.graphPanel = new System.Windows.Forms.Panel();
+            this.display = new GraphLib.PlotterDisplayEx();
             this.remLabel = new System.Windows.Forms.Label();
             this.graphPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // collectorStartStopButton
             // 
-            this.collectorStartStopButton.Location = new System.Drawing.Point(415, 23);
+            this.collectorStartStopButton.Location = new System.Drawing.Point(415, 19);
             this.collectorStartStopButton.Name = "collectorStartStopButton";
             this.collectorStartStopButton.Size = new System.Drawing.Size(75, 23);
             this.collectorStartStopButton.TabIndex = 0;
@@ -50,8 +50,9 @@
             // 
             // serialPortsComboBox
             // 
+            this.serialPortsComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.serialPortsComboBox.FormattingEnabled = true;
-            this.serialPortsComboBox.Location = new System.Drawing.Point(279, 25);
+            this.serialPortsComboBox.Location = new System.Drawing.Point(288, 21);
             this.serialPortsComboBox.Name = "serialPortsComboBox";
             this.serialPortsComboBox.Size = new System.Drawing.Size(121, 21);
             this.serialPortsComboBox.TabIndex = 1;
@@ -60,11 +61,22 @@
             // 
             this.heartRateLabel.AutoSize = true;
             this.heartRateLabel.Font = new System.Drawing.Font("Courier New", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.heartRateLabel.Location = new System.Drawing.Point(12, 9);
+            this.heartRateLabel.Location = new System.Drawing.Point(12, 5);
             this.heartRateLabel.Name = "heartRateLabel";
             this.heartRateLabel.Size = new System.Drawing.Size(84, 41);
             this.heartRateLabel.TabIndex = 2;
-            this.heartRateLabel.Text = "000";
+            this.heartRateLabel.Text = "---";
+            // 
+            // graphPanel
+            // 
+            this.graphPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.graphPanel.Controls.Add(this.display);
+            this.graphPanel.Location = new System.Drawing.Point(2, 57);
+            this.graphPanel.Name = "graphPanel";
+            this.graphPanel.Size = new System.Drawing.Size(498, 317);
+            this.graphPanel.TabIndex = 5;
             // 
             // display
             // 
@@ -83,22 +95,11 @@
             this.display.SolidGridColor = System.Drawing.Color.DarkGray;
             this.display.TabIndex = 4;
             // 
-            // graphPanel
-            // 
-            this.graphPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.graphPanel.Controls.Add(this.display);
-            this.graphPanel.Location = new System.Drawing.Point(2, 57);
-            this.graphPanel.Name = "graphPanel";
-            this.graphPanel.Size = new System.Drawing.Size(498, 317);
-            this.graphPanel.TabIndex = 5;
-            // 
             // remLabel
             // 
             this.remLabel.AutoSize = true;
             this.remLabel.Font = new System.Drawing.Font("Courier New", 27.75F, System.Drawing.FontStyle.Bold);
-            this.remLabel.Location = new System.Drawing.Point(167, 13);
+            this.remLabel.Location = new System.Drawing.Point(102, 5);
             this.remLabel.Name = "remLabel";
             this.remLabel.Size = new System.Drawing.Size(106, 41);
             this.remLabel.TabIndex = 6;
