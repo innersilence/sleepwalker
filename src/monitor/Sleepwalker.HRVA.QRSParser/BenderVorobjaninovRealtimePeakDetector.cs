@@ -4,42 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-//namespace ConsoleApp
-//{
-//    class Program
-//    {
-//        const double Threshold = 8;
-//        const double FilterValue = 16;
-//        const int SampleRate = 50;
-
-//        static void Main(string[] args)
-//        {
-//            List<string> lines = System.IO.File.ReadAllLines(@".\data_papa.csv").ToList();
-//            List<int> points = new List<int>();
-//            List<int> peakIndices = new List<int>();
-
-//            for (int i = 0; i < lines.Count; ++i)
-//            {
-//                string[] tokens = lines[i].Split(new char[] { ' ', '\n' });
-//                points.Add(int.Parse(tokens[0]));
-//                if (tokens.Length > 1)
-//                    peakIndices.Add(i);
-//            }
-
-//            List<Tuple<int, int>> peaksRealtime = new List<Tuple<int, int>>();
-//            var peakDetector = new BenderVorobjaninovRealtimePeakDetector(4000, 5);
-
-//            for (int i = 0; i < points.Count; ++i)
-//            {
-//                int peak = peakDetector.GetPeak(points[i]);
-//                if (Constants.NotAPeak != peak)
-//                {
-//                    peaksRealtime.Add(new Tuple<int, int>(peak, i - 1));
-//                }
-//            }
-//        }
-//    }
-//}
 
 
 namespace Sleepwalker.HRVA.Realtime
@@ -101,5 +65,29 @@ namespace Sleepwalker.HRVA.Realtime
             lastDataPoint = dataPoint;
             return new DataPoint(PeakDetector.Constants.NotAPeak);
         }
+
+        //public void TestPeakDetector()
+        //{
+        //    List<string> lines = System.IO.File.ReadAllLines(@".\data_papa_400.csv").ToList();
+        //    List<DataPoint> points = new List<DataPoint>();
+
+        //    lines.ForEach(l => 
+        //    { 
+        //        points.Add(new DataPoint(int.Parse(l.Trim('\n')))); 
+        //    });
+
+
+        //    var peakDetector = new BenderVorobjaninovRealtimePeakDetector(4000, 5) as IPeakDetector;
+
+        //    List<int> peaksRealtime = new List<int>();
+        //    points.ForEach(p =>
+        //    {
+        //        DataPoint peak = peakDetector.GetPeak(p);
+        //        if (PeakDetector.Constants.NotAPeak != peak.Value)
+        //        {
+        //            peaksRealtime.Add(peak.Value);
+        //        }
+        //    });
+        //}
     }
 }

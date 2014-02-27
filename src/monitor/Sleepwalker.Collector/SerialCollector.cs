@@ -9,8 +9,8 @@ namespace Sleepwalker.Collector
     {
         public static class Constants
         {
-            public const int DefaultBaudRate = 115200;
-            public const int DefaultDataPointQueueSize = 1000;
+            public const int DefaultBaudRate = 38400;
+            public const int DefaultDataPointQueueSize = 500;
         }
 
         private SerialPort serialPort;
@@ -30,24 +30,29 @@ namespace Sleepwalker.Collector
             irDataPointQueue = new FixedSizeConcurrentQueue<IRDataPoint>(Constants.DefaultDataPointQueueSize);
         }
 
-        public void Start()
+        public bool Start()
         {
             try
             {
                 serialPort.Open();
                 Stopped = false;
+                return true;
             }
             catch (Exception) { }
+
+            return false;
         }
 
-        public void Stop()
+        public bool Stop()
         {
             try
             {
                 serialPort.Close();
                 Stopped = true;
+                return true;
             }
             catch (Exception) { }
+            return false;
         }
 
         private void OnIncomingData(object sender, SerialDataReceivedEventArgs e)
