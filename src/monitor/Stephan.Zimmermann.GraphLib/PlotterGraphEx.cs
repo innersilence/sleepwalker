@@ -219,7 +219,7 @@ namespace GraphLib
                 gPane.starting_idx = 0;
                 paused = false;
                 isRunning = true;
-               // mTimer.Start();                
+                mTimer.Start();                
                 tb1.Buttons[0].ImageIndex = 2;                
             }
             else
@@ -252,7 +252,7 @@ namespace GraphLib
         {
             if (isRunning)
             {
-               // mTimer.Stop();
+                mTimer.Stop();
                 isRunning = false;
                 paused = false;
                 hScrollBar1.Value = 0;

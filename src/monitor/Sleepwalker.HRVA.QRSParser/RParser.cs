@@ -9,11 +9,6 @@ namespace Sleepwalker.HRVA.Realtime
 {
     public delegate void DataPointReceivedEventHandler(object sender, DataPoint p);
 
-    public interface IPeakDetector
-    {
-        DataPoint GetPeak(DataPoint p);
-    }
-
     public class RParser
     {
         private Queue<DataPoint> dataPoints;
@@ -24,15 +19,13 @@ namespace Sleepwalker.HRVA.Realtime
         public RParser()
         {
             dataPoints = new Queue<DataPoint>();
-            peakDetector = new BenderVorobjaninovRealtimePeakDetector(
-                Constants.PeakDetector.DefaultThreshold, Constants.PeakDetector.DefaultKappa) 
-                as IPeakDetector;
+            peakDetector = new BenderVorobjaninovRealtimePeakDetector() as IPeakDetector;
         }
 
         public void DataPointReceived(object sender, DataPoint p)
         {
             DataPoint peak = peakDetector.GetPeak(p);
-            if (peak.Value != Constants.PeakDetector.NotAPeak)
+            if (peak.Value != PeakDetector.Constants.NotAPeak)
             {
                 dataPoints.Enqueue(peak);
             }

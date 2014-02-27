@@ -7,17 +7,27 @@ namespace Sleepwalker.Collector
 {
     public class SerialCollector
     {
+        public static class Constants
+        {
+            public const int DefaultBaudRate = 115200;
+            public const int DefaultDataPointQueueSize = 1000;
+        }
+
         private SerialPort serialPort;
 
         public DataPointReceivedEventHandler EmitDataPoint;
+        public FixedSizeConcurrentQueue<IRDataPoint> irDataPointQueue;
+        //private FixedSizeConcurrentQueue<IRDataPoint> redDataPointQueue;
         public bool Stopped { get; set; }
 
         public SerialCollector(string port)
         {
-            serialPort = new SerialPort(port, 115200, Parity.None, 8, StopBits.One);
+            serialPort = new SerialPort(port, Constants.DefaultBaudRate, Parity.None, 8, StopBits.One);
             serialPort.Handshake = Handshake.None;
             serialPort.DataReceived += new SerialDataReceivedEventHandler(OnIncomingData);
             Stopped = true;
+
+            irDataPointQueue = new FixedSizeConcurrentQueue<IRDataPoint>(Constants.DefaultDataPointQueueSize);
         }
 
         public void Start()
@@ -45,11 +55,14 @@ namespace Sleepwalker.Collector
             SerialPort sp = (SerialPort)sender;
             string data = sp.ReadLine();
 
-            DataPoint dp = Parse(data);
-            if (dp != null)
+            DataPoint p = Parse(data);
+            if (p != null)
             {
-                if (dp.GetType() == typeof(IRDataPoint))
-                    EmitDataPoint(this, dp);
+                if (p.GetType() == typeof(IRDataPoint))
+                {
+                    irDataPointQueue.Enqueue(p as IRDataPoint);
+                    EmitDataPoint(this, p);
+                }
             }
         }
 
@@ -61,7 +74,6 @@ namespace Sleepwalker.Collector
 
             int channel = int.Parse(tokens[0]);
             int value = int.Parse(tokens[1]);
-            //double timestamp = double.Parse(tokens[2]);
 
             switch (channel)
             {

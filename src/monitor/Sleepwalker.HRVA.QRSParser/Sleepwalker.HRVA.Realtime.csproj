@@ -42,8 +42,10 @@
     <Compile Include="BenderVorobjaninovRealtimePeakDetector.cs" />
     <Compile Include="CommandDataPoint.cs" />
     <Compile Include="DataPoint.cs" />
+    <Compile Include="FixedSizeConcurrentQueue.cs" />
     <Compile Include="HRVAnalyzer.cs" />
     <Compile Include="IRDataPoint.cs" />
+    <Compile Include="PeakDetector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RParser.cs" />
     <Compile Include="RedDataPoint.cs" />

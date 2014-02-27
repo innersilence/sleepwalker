@@ -26,7 +26,7 @@ namespace Sleepwalker
         {
             InitializeComponent();
             InitializeComPortList();
-            InitializeGraphlib();
+            InitializeGraphlib(new EventHandler(SetFrameData));           
         }
 
         private void InitializeComPortList()
@@ -49,6 +49,24 @@ namespace Sleepwalker
             heartRateLabel.Text = "00";  
         }
 
+        private void SetFrameData(object sender, EventArgs e)
+        {
+            IRDataPoint[] collectedPoints = collector.irDataPointQueue.Queue.Take(display.DataSources[0].Length).ToArray();
+            try
+            {
+                GraphLib.cPoint[] displayPoints = display.DataSources[0].Samples;
+                for (int i = 0; i < collectedPoints.Length; ++ i)
+                {
+                    displayPoints[i].x = i;
+                    displayPoints[i].y = (float)collectedPoints[i].Value;
+                }
+                
+                this.Invoke(new MethodInvoker(RefreshGraph));
+            }
+            catch (ObjectDisposedException) { } // we get this on closing of form            
+            catch (Exception) { }
+        }
+
         private void collectorStartStopButton_Click(object sender, EventArgs e)
         {
             Button b = (Button)sender;
@@ -59,11 +77,15 @@ namespace Sleepwalker
                 //TestPeakDetector();
 
                 collector.Start();
+                display.Start();
+                
                 b.Text = "Stop";
             }
             else
             {
                 collector.Stop();
+                display.Stop();
+
                 b.Text = "Start";
             }
         }
@@ -72,27 +94,24 @@ namespace Sleepwalker
         {
             List<string> lines = System.IO.File.ReadAllLines(@".\data_papa_400.csv").ToList();
             List<DataPoint> points = new List<DataPoint>();
-            List<int> peakIndices = new List<int>();
 
-            for (int i = 0; i < lines.Count; ++i)
+            lines.ForEach(l => 
+            { 
+                points.Add(new DataPoint(int.Parse(l.Trim('\n')))); 
+            });
+
+
+            var peakDetector = new BenderVorobjaninovRealtimePeakDetector(4000, 5) as IPeakDetector;
+
+            List<int> peaksRealtime = new List<int>();
+            points.ForEach(p =>
             {
-                string[] tokens = lines[i].Split(new char[] { ' ', '\n' });
-                points.Add(new DataPoint(int.Parse(tokens[0])));
-                if (tokens.Length > 1)
-                    peakIndices.Add(i);
-            }
-
-            List<Tuple<int, int>> peaksRealtime = new List<Tuple<int, int>>();
-            var peakDetector = new BenderVorobjaninovRealtimePeakDetector(4000, 5);
-
-            for (int i = 0; i < points.Count; ++i)
-            {
-                DataPoint peak = peakDetector.GetPeak(points[i]);
-                if (Constants.PeakDetector.NotAPeak != peak.Value)
+                DataPoint peak = peakDetector.GetPeak(p);
+                if (PeakDetector.Constants.NotAPeak != peak.Value)
                 {
-                    peaksRealtime.Add(new Tuple<int, int>(peak.Value, i - 1));
+                    peaksRealtime.Add(peak.Value);
                 }
-            }
+            });
         }
     }
 }

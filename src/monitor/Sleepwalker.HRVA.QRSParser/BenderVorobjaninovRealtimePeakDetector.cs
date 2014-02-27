@@ -44,25 +44,29 @@ using System.Threading.Tasks;
 
 namespace Sleepwalker.HRVA.Realtime
 {
-    public static partial class Constants
+    public class BenderVorobjaninovRealtimePeakDetector : IPeakDetector
     {
-        public static partial class PeakDetector
+        public static class Constants
         {
-            public const int NotAPeak = -1;
             public const int DefaultThreshold = 4000;
             public const int DefaultKappa = 5;
         }
-    }
 
-
-    public class BenderVorobjaninovRealtimePeakDetector : IPeakDetector
-    {
-        readonly int Threshold = Constants.PeakDetector.DefaultThreshold;
-        readonly int Kappa = Constants.PeakDetector.DefaultKappa;
+        readonly int Threshold = Constants.DefaultThreshold;
+        readonly int Kappa = Constants.DefaultKappa;
 
         private int travel = 0;
-        private DataPoint startDataPoint;
-        private DataPoint lastDataPoint;
+        private DataPoint startDataPoint = new DataPoint(0);
+        private DataPoint lastDataPoint = new DataPoint(0);
+
+        public BenderVorobjaninovRealtimePeakDetector()
+        {
+            Threshold = Constants.DefaultThreshold;
+            Kappa = Constants.DefaultKappa;
+
+            startDataPoint.Value = 0;
+            lastDataPoint.Value = 0;
+        }
 
         public BenderVorobjaninovRealtimePeakDetector(int threashold, int kappa)
         {
@@ -75,7 +79,7 @@ namespace Sleepwalker.HRVA.Realtime
 
         public DataPoint GetPeak(DataPoint dataPoint)
         {
-            if (startDataPoint.Value == 0) { startDataPoint = dataPoint; lastDataPoint = dataPoint; return new DataPoint(Constants.PeakDetector.NotAPeak); } // First run. 
+            if (startDataPoint.Value == 0) { startDataPoint = dataPoint; lastDataPoint = dataPoint; return new DataPoint(PeakDetector.Constants.NotAPeak); } // First run. 
 
             travel += Math.Abs(dataPoint.Value - lastDataPoint.Value);
             int rise = Math.Abs(dataPoint.Value - startDataPoint.Value) + Kappa;
@@ -91,11 +95,11 @@ namespace Sleepwalker.HRVA.Realtime
                 if (rise > Threshold)
                     return peak;
                 else
-                    return new DataPoint(Constants.PeakDetector.NotAPeak);
+                    return new DataPoint(PeakDetector.Constants.NotAPeak);
             }
 
             lastDataPoint = dataPoint;
-            return new DataPoint(Constants.PeakDetector.NotAPeak);
+            return new DataPoint(PeakDetector.Constants.NotAPeak);
         }
     }
 }
