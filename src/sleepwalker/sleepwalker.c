@@ -115,13 +115,13 @@ int main(void) {
 IR LED 
    1.4-1.5V @ 20mA  
      754-1433-1-ND 940nm 1.2V @ 50mA case: 0603 
-     296-11044-1-ND      1.2V @ 50mA case: SOT23
+     296-11044-1-ND      1.2V @ 50mA case: SOT23-5
 
 
 Red LED 2.0-2.4V @ 50mA
    754-1122-1-ND                   660nm 1.85V @ 20mA case: 0603
-   LT3008ETS8-1.8#TRMPBFCT-ND             1.8V @ 20mA case: SOT23 (NON-STOCK)
-   LT3008ETS8-2.5#TRMPBFCT-ND             2.5V @ 20mA case: SOT23
+   LT3008ETS8-1.8#TRMPBFCT-ND             1.8V @ 20mA case: SOT23-8 (NON-STOCK)
+   LT3008ETS8-2.5#TRMPBFCT-ND             2.5V @ 20mA case: SOT23-8
 
 
 . Powering IR LED. Current must be around 20mA, I = V/R -> 3.3V/0.020A =~ 165Ohm. Voltage on led must ve around 1.4-1.5V
