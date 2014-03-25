@@ -33,9 +33,11 @@
             this.serialPortsComboBox = new System.Windows.Forms.ComboBox();
             this.heartRateLabel = new System.Windows.Forms.Label();
             this.graphPanel = new System.Windows.Forms.Panel();
+            this.sleepPhaseLabel = new System.Windows.Forms.Label();
+            this.thresholdNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.display = new GraphLib.PlotterDisplayEx();
-            this.remLabel = new System.Windows.Forms.Label();
             this.graphPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.thresholdNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // collectorStartStopButton
@@ -78,6 +80,29 @@
             this.graphPanel.Size = new System.Drawing.Size(498, 317);
             this.graphPanel.TabIndex = 5;
             // 
+            // sleepPhaseLabel
+            // 
+            this.sleepPhaseLabel.AutoSize = true;
+            this.sleepPhaseLabel.Font = new System.Drawing.Font("Courier New", 27.75F, System.Drawing.FontStyle.Bold);
+            this.sleepPhaseLabel.Location = new System.Drawing.Point(102, 5);
+            this.sleepPhaseLabel.Name = "sleepPhaseLabel";
+            this.sleepPhaseLabel.Size = new System.Drawing.Size(150, 41);
+            this.sleepPhaseLabel.TabIndex = 6;
+            this.sleepPhaseLabel.Tag = "s";
+            this.sleepPhaseLabel.Text = "NonREM";
+            // 
+            // thresholdNumericUpDown
+            // 
+            this.thresholdNumericUpDown.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.thresholdNumericUpDown.Location = new System.Drawing.Point(19, 381);
+            this.thresholdNumericUpDown.Name = "thresholdNumericUpDown";
+            this.thresholdNumericUpDown.Size = new System.Drawing.Size(77, 20);
+            this.thresholdNumericUpDown.TabIndex = 7;
+            // 
             // display
             // 
             this.display.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -95,23 +120,13 @@
             this.display.SolidGridColor = System.Drawing.Color.DarkGray;
             this.display.TabIndex = 4;
             // 
-            // remLabel
-            // 
-            this.remLabel.AutoSize = true;
-            this.remLabel.Font = new System.Drawing.Font("Courier New", 27.75F, System.Drawing.FontStyle.Bold);
-            this.remLabel.Location = new System.Drawing.Point(102, 5);
-            this.remLabel.Name = "remLabel";
-            this.remLabel.Size = new System.Drawing.Size(106, 41);
-            this.remLabel.TabIndex = 6;
-            this.remLabel.Tag = "s";
-            this.remLabel.Text = "NREM";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(502, 408);
-            this.Controls.Add(this.remLabel);
+            this.Controls.Add(this.thresholdNumericUpDown);
+            this.Controls.Add(this.sleepPhaseLabel);
             this.Controls.Add(this.graphPanel);
             this.Controls.Add(this.heartRateLabel);
             this.Controls.Add(this.serialPortsComboBox);
@@ -119,6 +134,7 @@
             this.Name = "MainForm";
             this.Text = "Form1";
             this.graphPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.thresholdNumericUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -131,7 +147,8 @@
         private System.Windows.Forms.Label heartRateLabel;
         private GraphLib.PlotterDisplayEx display;
         private System.Windows.Forms.Panel graphPanel;
-        private System.Windows.Forms.Label remLabel;
+        private System.Windows.Forms.Label sleepPhaseLabel;
+        private System.Windows.Forms.NumericUpDown thresholdNumericUpDown;
     }
 }
 

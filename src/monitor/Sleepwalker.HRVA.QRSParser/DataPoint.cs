@@ -8,13 +8,19 @@ namespace Sleepwalker.HRVA.Realtime
 {
     public class DataPoint
     {
-        public int Value { get; set; }
+        public double Value { get; set; }
         public DateTime Timestamp { get; set; }
 
-        public DataPoint(int val)
+        public DataPoint(double val)
         {
             Value = val;
             Timestamp = DateTime.Now.ToUniversalTime();
+        }
+
+        public DataPoint(double val, DateTime timestamp)
+        {
+            Value = val;
+            Timestamp = timestamp;
         }
 
         public override string ToString()

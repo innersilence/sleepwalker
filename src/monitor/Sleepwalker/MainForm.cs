@@ -43,6 +43,9 @@ namespace Sleepwalker
             parser = new RParser();
             parser.EmitDataPoint += analyser.DataPointReceived;
 
+            analyser.UpdateHeartRate += UpdateHeartRateDisplay;
+            analyser.UpdateSleepPhase += UpdateSleepPhaseDisplay;
+
             string port = serialPortsComboBox.Items[serialPortsComboBox.SelectedIndex].ToString();
             collector = new SerialCollector(port);       
             collector.EmitDataPoint += parser.DataPointReceived; 
@@ -70,15 +73,12 @@ namespace Sleepwalker
         {
             Button b = (Button)sender;
             b.Enabled = false;
-            if (collector == null || collector.Stopped)
+            if (collector.Start())
             {
-                if (collector.Start())
-                {
-                    display.Start();
-                    StartGraph();
+                display.Start();
+                StartGraph();
 
-                    b.Text = "Stop";
-                }
+                b.Text = "Stop";
             }
             else
             {
@@ -91,6 +91,16 @@ namespace Sleepwalker
                 }
             }
             b.Enabled = true;
+        }
+
+        private void UpdateHeartRateDisplay(object sender, double rate)
+        {
+            this.heartRateLabel.Text = rate.ToString();
+        }
+
+        private void UpdateSleepPhaseDisplay(object sender, SleepState phase)
+        {
+            this.sleepPhaseLabel.Text = phase.GetType().ToString();
         }
     }
 }

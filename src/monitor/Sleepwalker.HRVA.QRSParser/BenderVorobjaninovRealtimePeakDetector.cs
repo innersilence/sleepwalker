@@ -12,14 +12,14 @@ namespace Sleepwalker.HRVA.Realtime
     {
         public static class Constants
         {
-            public const int DefaultThreshold = 4000;
-            public const int DefaultKappa = 5;
+            public const double DefaultThreshold = 4000;
+            public const double DefaultKappa = 5;
         }
 
-        readonly int Threshold = Constants.DefaultThreshold;
-        readonly int Kappa = Constants.DefaultKappa;
+        readonly double Threshold = Constants.DefaultThreshold;
+        readonly double Kappa = Constants.DefaultKappa;
 
-        private int travel = 0;
+        private double travel = 0;
         private DataPoint startDataPoint = new DataPoint(0);
         private DataPoint lastDataPoint = new DataPoint(0);
 
@@ -46,7 +46,7 @@ namespace Sleepwalker.HRVA.Realtime
             if (startDataPoint.Value == 0) { startDataPoint = dataPoint; lastDataPoint = dataPoint; return new DataPoint(PeakDetector.Constants.NotAPeak); } // First run. 
 
             travel += Math.Abs(dataPoint.Value - lastDataPoint.Value);
-            int rise = Math.Abs(dataPoint.Value - startDataPoint.Value) + Kappa;
+            double rise = Math.Abs(dataPoint.Value - startDataPoint.Value) + Kappa;
 
             if ((travel / rise >= 1)) // Peak found.     
             {
