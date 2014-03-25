@@ -122,13 +122,9 @@ Red LED 2.0-2.4V @ 50mA
    754-1122-1-ND                   660nm 1.85V @ 20mA case: 0603
    LT3008ETS8-1.8#TRMPBFCT-ND             1.8V @ 20mA case: SOT23-8 (NON-STOCK)
    LT3008ETS8-2.5#TRMPBFCT-ND             2.5V @ 20mA case: SOT23-8
+   
+   587-1338-1-ND                  4.7uF capacitors 
+   1212-1101-ND                   0.1" female header 1x14
+   1212-1147-ND                   0.1" male header 1x14
 
-
-. Powering IR LED. Current must be around 20mA, I = V/R -> 3.3V/0.020A =~ 165Ohm. Voltage on led must ve around 1.4-1.5V
-   3.3/1.5 = (165 + x) / x
-   3.3 * x = 1.5 * (165 + x)
-   3.3x = 1.5x + 247.5
-   1.8x = 247.5
-   x = 138Ohm
-   Two resistors 165 & 138 Ohms led connected in between and to the ground, current = 20mA, voltage = 1.5V
 */
